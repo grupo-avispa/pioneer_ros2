@@ -35,7 +35,7 @@ jobs:
           mkdir -p ${{ env.ARIACODA_PATH }} && cd ${{ env.ARIACODA_PATH }}
           git clone ${{ env.ARIACODA_URL }}
           cd ${{ env.ARIACODA_PATH }}/AriaCoda
-          make install
+          make && sudo make install
 
   install-pioneer:
     runs-on: ubuntu-24.04
