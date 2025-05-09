@@ -1,0 +1,14 @@
+# Pioneer Aria
+aria:
+  ros__parameters:
+    serial_port: "/dev/ttyUSB0"
+    baud_rate: 9600
+    module_plugins: ["charger", "drive"]
+    charger:
+      plugin: "pioneer_modules::Charger"
+    drive:
+      plugin: "pioneer_modules::Drive"
+      robot_base_frame: "base_link"
+      odom_frame: "odom"
+      odom_topic: "odom"
+      publish_tf: true

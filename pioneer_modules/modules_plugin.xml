@@ -1,0 +1,12 @@
+<class_libraries>
+    <library path="pioneer_charger">
+        <class type="pioneer_modules::Charger" base_class_type="pioneer_core::Module">
+            <description>Charger module</description>
+        </class>
+    </library>
+    <library path="pioneer_drive">
+        <class type="pioneer_modules::Drive" base_class_type="pioneer_core::Module">
+            <description>Drive module</description>
+        </class>
+    </library>
+</class_libraries>
