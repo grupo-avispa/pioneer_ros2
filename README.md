@@ -1,7 +1,7 @@
 # pioneer_ros2
 
 ![ROS2](https://img.shields.io/badge/ros2-jazzy-blue?logo=ros&logoColor=white)
-![License](https://img.shields.io/github/license/grupo-avispa/pioneer)
+![License](https://img.shields.io/github/license/grupo-avispa/pioneer_ros2)
 [![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/grupo-avispa/pioneer/actions/workflows/build.yml)
 
 ## Overview
@@ -10,7 +10,7 @@
 
  * [pioneer_common]: This package provides common functionalities for the pioneer stack.
  * [pioneer_core]: This package provides the abstract interface (virtual base classes) for the Pioneer Modules.
- * [pioneer_mira]: This is the main node that interfaces with the Aria framework.
+ * [pioneer_aria]: This is the main node that interfaces with the Aria framework.
  * [pioneer_modules]: This package contains the implementations of the Pioneer modules such as `drive`, `charger`, etc.
  * [pioneer_msgs]: This package contains messages and services related to the MobileRobots Pioneer robot base.
 

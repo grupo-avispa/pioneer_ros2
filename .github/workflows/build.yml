@@ -10,7 +10,7 @@ on:
 
 env:
   ARIACODA_PATH: ${{ github.workspace }}/ariacoda
-  ARIACODA_URL: git@github.com:grupo-avispa/AriaCoda.git
+  ARIACODA_URL: https://github.com/grupo-avispa/AriaCoda.git
 
 jobs:
   install-ariacoda:
