@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>pioneer_ros2</name>
+  <version>0.0.0</version>
+  <description>Pioneer stack</description>
+  <maintainer email="ajtudela@gmail.com">Alberto Tudela</maintainer>
+  <license>Apache-2.0</license>
+  <author email="ajtudela@gmail.com">Alberto Tudela</author>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <!-- <exec_depend>scitos2_core</exec_depend>
+  <exec_depend>scitos2_mira</exec_depend>
+  <exec_depend>scitos2_modules</exec_depend> -->
+  <exec_depend>pioneer_msgs</exec_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
