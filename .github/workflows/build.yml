@@ -19,7 +19,7 @@ jobs:
       - name: Cache APT Packages
         uses: awalsh128/cache-apt-pkgs-action@v1.4.3
         with:
-          packages: git
+          packages: git doxygen
       - name: Cache ARIACODA
         id: cache-ariacoda
         uses: actions/cache@v4.2.0
