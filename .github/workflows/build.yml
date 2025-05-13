@@ -46,6 +46,8 @@ jobs:
         uses: ros-tooling/setup-ros@0.7.5
         with:
           required-ros-distributions: jazzy
+      - name: Workaround restore system directories
+        run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
       - name: Restore AriaCoda cache
         id: restore-cache-ariacoda
         uses: actions/cache@v4.2.0
