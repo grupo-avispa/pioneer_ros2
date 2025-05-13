@@ -222,6 +222,10 @@ rcl_interfaces::msg::SetParametersResult Drive::dynamicParametersCallback(
         RCLCPP_INFO(logger_, "The parameter odom_topic is set to: [%s]", odom_topic_.c_str());
       }
     } else if (type == ParameterType::PARAMETER_INTEGER) {
+      if (name == plugin_name_ + ".velocity_timeout") {
+        vel_timeout_ = rclcpp::Duration::from_seconds(parameter.as_int() / 1000.0);
+        RCLCPP_INFO(logger_, "The parameter velocity_timeout is set to: [%i]", parameter.as_int());
+      }
     }
   }
 
