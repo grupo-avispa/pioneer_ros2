@@ -7,5 +7,6 @@ Changelog for package pioneer_core
 * Initial release.
 * Create README.md.
 * Added Module class (.hpp file).
+* Added Aria logger class.
 * Added dependency to pioneer_common.
 * Contributors: Alberto Tudela

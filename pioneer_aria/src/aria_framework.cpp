@@ -35,6 +35,10 @@ AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
 {
   RCLCPP_INFO(get_logger(), "Creating Aria framework");
 
+  // Redirect Aria logger
+  aria_logger_ = std::make_shared<pioneer_core::AriaLogger>(this->get_logger());
+  ArLog::setFunctor(aria_logger_.get());
+
   robot_ = std::make_shared<ArRobot>();
   args_ = std::make_unique<ArArgumentBuilder>();
   arg_parser_ = std::make_unique<ArArgumentParser>(args_.get());
@@ -49,6 +53,8 @@ AriaFramework::~AriaFramework()
   robot_.reset();
   connector_.reset();
   timer_.reset();
+
+  ArLog::clearFunctor();
 }
 
 nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::State & state)

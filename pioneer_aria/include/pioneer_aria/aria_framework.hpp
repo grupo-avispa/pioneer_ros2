@@ -35,6 +35,7 @@
 #include "pluginlib/class_loader.hpp"
 
 // Pioneer
+#include "pioneer_core/aria_logger.hpp"
 #include "pioneer_core/module.hpp"
 
 namespace pioneer_aria
@@ -114,11 +115,12 @@ protected:
   rclcpp_lifecycle::LifecyclePublisher<diagnostic_msgs::msg::DiagnosticArray>::SharedPtr diag_pub_;
   rclcpp::TimerBase::SharedPtr timer_;
 
-  // Aria connector
+  // Aria connector, robot and argument parser
   std::shared_ptr<ArRobot> robot_;
   std::unique_ptr<ArRobotConnector> connector_;
   std::unique_ptr<ArArgumentBuilder> args_;
   std::unique_ptr<ArArgumentParser> arg_parser_;
+  std::shared_ptr<pioneer_core::AriaLogger> aria_logger_;
   bool connected_;
 
   // Module Plugins
