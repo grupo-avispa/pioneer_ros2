@@ -52,10 +52,11 @@ jobs:
         uses: actions/cache@v4.2.0
         with:
           path: |
-            ${{ env.ARIACODA_PATH }}
             /usr/local/lib
             /usr/local/include/Aria
           key: ariacoda-${{ runner.os }}-ubuntu-24.04
+      - name: test
+        run: ls -la /usr/local/include/
       - name: Build packages
         uses: ros-tooling/action-ros-ci@0.3.13
         with:
