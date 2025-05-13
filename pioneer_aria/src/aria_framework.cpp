@@ -48,9 +48,9 @@ AriaFramework::~AriaFramework()
 {
   modules_.clear();
 
+  robot_.reset();
   args_.reset();
   arg_parser_.reset();
-  robot_.reset();
   connector_.reset();
   timer_.reset();
 
@@ -214,6 +214,12 @@ nav2_util::CallbackReturn AriaFramework::on_deactivate(const rclcpp_lifecycle::S
     it->second->deactivate();
   }
 
+  // Stop the robot
+  if (robot_->isRunning()) {
+    robot_->stopRunning();
+    robot_->waitForRunExit();
+  }
+
   // Destroy bond connection
   destroyBond();
 
@@ -234,11 +240,7 @@ nav2_util::CallbackReturn AriaFramework::on_cleanup(const rclcpp_lifecycle::Stat
   diag_pub_.reset();
   timer_.reset();
 
-  // Stop and disconnect the robot
-  if (robot_->isRunning()) {
-    robot_->stopRunning();
-    robot_->waitForRunExit();
-  }
+  // Disconnect the robot
   if (connected_) {
     connector_->disconnectAll();
     connected_ = false;

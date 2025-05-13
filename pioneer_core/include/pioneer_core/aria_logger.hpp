@@ -36,7 +36,7 @@ public:
    * @param level Aria log level to determine the severity of the logs.
    */
   explicit AriaLogger(rclcpp::Logger logger)
-  : logger_(logger){}
+  : logger_(logger) {}
 
   /**
    * @brief Invoke without parameters.
@@ -48,7 +48,8 @@ public:
    *
    * @param message The log message from Aria.
    */
-  void invoke(const char *message) override{
+  void invoke(const char *message) override
+  {
     RCLCPP_INFO(logger_, message);
   }
 
@@ -62,7 +63,7 @@ public:
     // Convert Aria log level to RCLCPP log level
     switch (level) {
       case ArLog::Terse:
-        RCLCPP_WARN(logger_, message); 
+        RCLCPP_WARN(logger_, message);
         break;
       case ArLog::Normal:
         RCLCPP_INFO(logger_, message);

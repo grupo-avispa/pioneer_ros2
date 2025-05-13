@@ -34,15 +34,14 @@ void Drive::configure(
   std::weak_ptr<ArRobot> robot)
 {
   // Declare and read parameters
-  auto node = parent.lock();
-  if (!node) {
+  node_ = parent.lock();
+  if (!node_) {
     throw std::runtime_error("Unable to lock node!");
   }
 
-  is_active_ = false;
   plugin_name_ = name;
-  logger_ = node->get_logger();
-  clock_ = node->get_clock();
+  logger_ = node_->get_logger();
+  clock_ = node_->get_clock();
 
   robot_ = robot.lock();
   if (!robot_) {
@@ -51,50 +50,74 @@ void Drive::configure(
 
   // Declare and read parameters
   declare_parameter_if_not_declared(
-    node, plugin_name_ + ".robot_base_frame",
+    node_, plugin_name_ + ".robot_base_frame",
     rclcpp::ParameterValue("base_link"), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("The name of the base frame of the robot"));
-  node->get_parameter(plugin_name_ + ".robot_base_frame", robot_base_frame_);
+  node_->get_parameter(plugin_name_ + ".robot_base_frame", robot_base_frame_);
   RCLCPP_INFO(logger_, "The parameter robot_base_frame is set to: [%s]", robot_base_frame_.c_str());
 
   declare_parameter_if_not_declared(
-    node, plugin_name_ + ".odom_frame",
+    node_, plugin_name_ + ".odom_frame",
     rclcpp::ParameterValue("odom"), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("The name of the odometry frame"));
-  node->get_parameter(plugin_name_ + ".odom_frame", odom_frame_);
+  node_->get_parameter(plugin_name_ + ".odom_frame", odom_frame_);
   RCLCPP_INFO(logger_, "The parameter odom_frame is set to: [%s]", odom_frame_.c_str());
 
   declare_parameter_if_not_declared(
-    node, plugin_name_ + ".odom_topic",
+    node_, plugin_name_ + ".odom_topic",
     rclcpp::ParameterValue("odom"), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("The name of the odometry topic"));
-  node->get_parameter(plugin_name_ + ".odom_topic", odom_topic_);
+  node_->get_parameter(plugin_name_ + ".odom_topic", odom_topic_);
   RCLCPP_INFO(logger_, "The parameter odom_topic is set to: [%s]", odom_topic_.c_str());
 
   declare_parameter_if_not_declared(
-    node, plugin_name_ + ".enable_stamped_cmd_vel",
+    node_, plugin_name_ + ".enable_stamped_cmd_vel",
     rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Enable the stamped cmd_vel topic"));
-  node->get_parameter(plugin_name_ + ".enable_stamped_cmd_vel", is_stamped_);
+  node_->get_parameter(plugin_name_ + ".enable_stamped_cmd_vel", is_stamped_);
   RCLCPP_INFO(
     logger_, "The parameter enable_stamped_cmd_vel is set to: [%s]",
       is_stamped_ ? "true" : "false");
 
   declare_parameter_if_not_declared(
-    node, plugin_name_ + ".publish_tf",
+    node_, plugin_name_ + ".publish_tf",
     rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Publish the odometry as a tf2 transform"));
-  node->get_parameter(plugin_name_ + ".publish_tf", publish_tf_);
+  node_->get_parameter(plugin_name_ + ".publish_tf", publish_tf_);
   RCLCPP_INFO(
     logger_, "The parameter publish_tf_ is set to: [%s]", publish_tf_ ? "true" : "false");
 
+  bool enable_motors_at_startup;
+  declare_parameter_if_not_declared(
+    node_, plugin_name_ + ".enable_motors_at_startup",
+    rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()
+    .set__description("Enable the motors at startup"));
+  node_->get_parameter(plugin_name_ + ".enable_motors_at_startup", enable_motors_at_startup);
+  RCLCPP_INFO(
+    logger_, "The parameter enable_motors_at_startup_ is set to: [%s]",
+    enable_motors_at_startup ? "true" : "false");
+  if (enable_motors_at_startup) {
+    robot_->enableMotors();
+  } else {
+    robot_->disableMotors();
+  }
+
+  int timeout = 0;
+  declare_parameter_if_not_declared(
+    node_, plugin_name_ + ".velocity_timeout",
+    rclcpp::ParameterValue(20), rcl_interfaces::msg::ParameterDescriptor()
+    .set__description("The interval in milliseconds to check for new velocity commands"));
+  node_->get_parameter(plugin_name_ + ".velocity_timeout", timeout);
+  RCLCPP_INFO(logger_, "The parameter velocity_timeout is set to: [%i]", timeout);
+  vel_timeout_ = rclcpp::Duration::from_seconds(timeout / 1000.0);
+
   // Create ROS publishers
   auto latched_profile = rclcpp::QoS(rclcpp::KeepLast(1)).transient_local().reliable();
-  front_bumper_pub_ = node->create_publisher<pioneer_msgs::msg::BumperState>(
+  front_bumper_pub_ = node_->create_publisher<pioneer_msgs::msg::BumperState>(
     "front_bumper", latched_profile);
-  rear_bumper_pub_ = node->create_publisher<pioneer_msgs::msg::BumperState>(
+  rear_bumper_pub_ = node_->create_publisher<pioneer_msgs::msg::BumperState>(
     "rear_bumper", latched_profile);
-  odometry_pub_ = node->create_publisher<nav_msgs::msg::Odometry>(
+  odometry_pub_ = node_->create_publisher<nav_msgs::msg::Odometry>(
     odom_topic_, rclcpp::SystemDefaultsQoS());
 
   // Create Aria subscribers
@@ -107,14 +130,14 @@ void Drive::configure(
 
   // Create ROS subscribers
   if (is_stamped_) {
-    cmd_vel_stamped_sub_ = node->create_subscription<geometry_msgs::msg::TwistStamped>(
+    cmd_vel_stamped_sub_ = node_->create_subscription<geometry_msgs::msg::TwistStamped>(
       "cmd_vel",
       rclcpp::SystemDefaultsQoS(),
       [this](const geometry_msgs::msg::TwistStamped::SharedPtr msg) {
         velocityCommandCallback(msg->twist);
       });
   } else {
-    cmd_vel_sub_ = node->create_subscription<geometry_msgs::msg::Twist>(
+    cmd_vel_sub_ = node_->create_subscription<geometry_msgs::msg::Twist>(
       "cmd_vel",
       rclcpp::SystemDefaultsQoS(),
       [this](const geometry_msgs::msg::Twist::SharedPtr msg) {
@@ -123,16 +146,16 @@ void Drive::configure(
   }
 
   // Create ROS services
-  enable_motors_service_ = node->create_service<pioneer_msgs::srv::EnableMotors>(
+  enable_motors_service_ = node_->create_service<pioneer_msgs::srv::EnableMotors>(
     "drive/enable_motors", std::bind(&Drive::enableMotors, this, _1, _2));
 
   // Callback for monitor changes in parameters
-  dyn_params_handler_ = node->add_on_set_parameters_callback(
+  dyn_params_handler_ = node_->add_on_set_parameters_callback(
     std::bind(&Drive::dynamicParametersCallback, this, _1));
 
   // Initialize the transform broadcaster
   if (publish_tf_) {
-    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(node);
+    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(node_);
   }
 
   // Initialize the bumpers
@@ -151,6 +174,7 @@ void Drive::cleanup()
   cmd_vel_stamped_sub_.reset();
   enable_motors_service_.reset();
   tf_broadcaster_.reset();
+  cmd_vel_watchdog_timer_.reset();
 }
 
 void Drive::activate()
@@ -160,6 +184,9 @@ void Drive::activate()
   front_bumper_pub_->on_activate();
   rear_bumper_pub_->on_activate();
   odometry_pub_->on_activate();
+
+  cmd_vel_watchdog_timer_ = node_->create_wall_timer(
+    std::chrono::milliseconds(10), std::bind(&Drive::velocityWatchdogCallback, this));
 }
 
 void Drive::deactivate()
@@ -169,7 +196,7 @@ void Drive::deactivate()
   front_bumper_pub_->on_deactivate();
   rear_bumper_pub_->on_deactivate();
   odometry_pub_->on_deactivate();
-  is_active_ = false;
+  robot_->disableMotors();
 }
 
 rcl_interfaces::msg::SetParametersResult Drive::dynamicParametersCallback(
@@ -250,6 +277,7 @@ void Drive::bumperDataCallback()
 
 void Drive::velocityCommandCallback(const geometry_msgs::msg::Twist & msg)
 {
+  last_vel_received_ = clock_->now();
   robot_->lock();
   robot_->setVel(msg.linear.x * 1e3);
   if (robot_->hasLatVel()) {
@@ -257,6 +285,20 @@ void Drive::velocityCommandCallback(const geometry_msgs::msg::Twist & msg)
   }
   robot_->setRotVel(msg.angular.z * 180 / M_PI);
   robot_->unlock();
+}
+
+void Drive::velocityWatchdogCallback()
+{
+  // If no velocity command has been received, stop the robot
+  if (clock_->now() - last_vel_received_ > vel_timeout_) {
+    robot_->lock();
+    robot_->setVel(0);
+    if (robot_->hasLatVel()) {
+      robot_->setLatVel(0);
+    }
+    robot_->setRotVel(0);
+    robot_->unlock();
+  }
 }
 
 bool Drive::enableMotors(

@@ -83,11 +83,8 @@ void Charger::batteryDataCallback()
   battery.header.frame_id = "base_link";
   battery.header.stamp = clock_->now();
   battery.voltage = robot_->getRealBatteryVoltageNow();
-  battery.temperature = std::numeric_limits<float>::quiet_NaN();
-  battery.current = std::numeric_limits<float>::quiet_NaN();
-  battery.charge = std::numeric_limits<float>::quiet_NaN();
-  battery.capacity = std::numeric_limits<float>::quiet_NaN();
-  battery.design_capacity = std::numeric_limits<float>::quiet_NaN();
+  battery.temperature = robot_->hasTemperature() ?
+    robot_->getTemperature() : std::numeric_limits<float>::quiet_NaN();
   battery.percentage = robot_->haveStateOfCharge() ? robot_->getStateOfCharge() / 100.0 :
     std::numeric_limits<float>::quiet_NaN();
 

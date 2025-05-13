@@ -68,6 +68,14 @@ The Drive module controls the robot's motors, handling velocity commands, odomet
 
 	This parameter should be set to true to publish the TF between `odom_frame` and `robot_base_frame`.
 
+* **`enable_motors_at_startup`** (bool, default: true)
+
+	Specifies whether to enable the motors at startup.
+
+* **`velocity_timeout`** (int, default: 20)
+
+	The interval in milliseconds to check for new velocity commands. If no command is received within this time, the robot will stop.
+
 
 [nav_msgs/Odometry]: http://docs.ros2.org/jazzy/api/nav_msgs/msg/Odometry.html
 [geometry_msgs/TwistStamped]: http://docs.ros2.org/jazzy/api/geometry_msgs/msg/TwistStamped.html

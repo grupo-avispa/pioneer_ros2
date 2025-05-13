@@ -103,6 +103,11 @@ protected:
   void velocityCommandCallback(const geometry_msgs::msg::Twist & msg);
 
   /**
+   * @brief Callback executed after a timeout when no velocity command is received.
+   */
+  void velocityWatchdogCallback();
+
+  /**
    * @brief Enable motors service callback.
    *
    * @param request Enable motors request.
@@ -144,6 +149,7 @@ protected:
   std::string plugin_name_;
   rclcpp::Clock::SharedPtr clock_;
   rclcpp::Logger logger_{rclcpp::get_logger("Drive")};
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
 
   // Dynamic parameters handler
   std::mutex mutex_;
@@ -158,6 +164,7 @@ protected:
   front_bumper_pub_, rear_bumper_pub_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Odometry>> odometry_pub_;
 
+  // ROS Subscribers
   std::shared_ptr<rclcpp::Subscription<geometry_msgs::msg::Twist>> cmd_vel_sub_;
   std::shared_ptr<rclcpp::Subscription<geometry_msgs::msg::TwistStamped>> cmd_vel_stamped_sub_;
 
@@ -165,8 +172,10 @@ protected:
   std::shared_ptr<rclcpp::Service<pioneer_msgs::srv::EnableMotors>> enable_motors_service_;
 
   std::string robot_base_frame_, odom_frame_, odom_topic_;
-  bool is_active_;
   bool is_stamped_;
+  rclcpp::Time last_vel_received_;
+  rclcpp::TimerBase::SharedPtr cmd_vel_watchdog_timer_;
+  rclcpp::Duration vel_timeout_{0, 0};
 
   // Bumpers
   pioneer_msgs::msg::BumperState front_bumper_state_, rear_bumper_state_;
