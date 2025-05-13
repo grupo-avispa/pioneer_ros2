@@ -9,4 +9,9 @@
             <description>Drive module</description>
         </class>
     </library>
+    <library path="pioneer_sonar">
+        <class type="pioneer_modules::Sonar" base_class_type="pioneer_core::Module">
+            <description>Sonar module</description>
+        </class>
+    </library>
 </class_libraries>

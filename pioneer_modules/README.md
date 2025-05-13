@@ -40,10 +40,6 @@ The Drive module controls the robot's motors, handling velocity commands, odomet
 
 	Publishes the current state of the robot's bumper.
 
-* **`drive_status`** ([pioneer_msgs/DriveStatus])
-
-	Publishes the state of the motors, free-run mode, emergency button status, bumper status, and more.
-
 #### Services
 
 * **`enable_motors`** ([pioneer_msgs/EnableMotors])
@@ -76,10 +72,34 @@ The Drive module controls the robot's motors, handling velocity commands, odomet
 
 	The interval in milliseconds to check for new velocity commands. If no command is received within this time, the robot will stop.
 
+### Sonar
+
+The Sonar module controls the robot's sonar sensors, providing real-time updates on the distance to obstacles.
+
+#### Published Topics
+
+* **`sonar`** ([sensor_msgs/PointCloud2])
+
+	Publishes the sonar data as a point cloud.
+
+#### Parameters
+
+* **`sonar_frame`** (string, default: sonar_link)
+
+	Specifies the name of the sonar frame.
+
+* **`sonar_topic`** (string, default: sonar)
+
+	Specifies the name of the sonar topic.
+
+* **`enable_sonar_at_startup`** (bool, default: true)
+
+	Specifies whether to enable the sonar at startup.
+
 
 [nav_msgs/Odometry]: http://docs.ros2.org/jazzy/api/nav_msgs/msg/Odometry.html
 [geometry_msgs/TwistStamped]: http://docs.ros2.org/jazzy/api/geometry_msgs/msg/TwistStamped.html
 [sensor_msgs/BatteryState]: https://docs.ros2.org/jazzy/api/sensor_msgs/msg/BatteryState.html
+[sensor_msgs/PointCloud2]: http://docs.ros2.org/jazzy/api/sensor_msgs/msg/PointCloud2.html
 [pioneer_msgs/BumperState]: ../pioneer_msgs/msg/BumperState.msg
-[pioneer_msgs/DriveStatus]: ../pioneer_msgs/msg/DriveStatus.msg
-[pioneer_msgs/EnableMotors]: ../pioneer_msgs/srv/EnableMotors.msg
+[pioneer_msgs/EnableMotors]: ../pioneer_msgs/srv/EnableMotors.srv

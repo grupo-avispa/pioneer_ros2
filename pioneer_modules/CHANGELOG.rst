@@ -4,6 +4,7 @@ Changelog for package pioneer_modules
 
 0.0.0 (XX-XX-XXXX)
 ------------------
-* Added Drive module.
 * Added Charger module.
+* Added Drive module.
+* Added Sonar module.
 * Contributors: Alberto Tudela.

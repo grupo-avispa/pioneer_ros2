@@ -103,12 +103,28 @@ target_link_libraries(pioneer_drive
 )
 target_link_aria_libraries(pioneer_drive)
 
+add_library(pioneer_sonar SHARED src/sonar.cpp)
+target_include_directories(pioneer_sonar PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
+)
+target_link_libraries(pioneer_sonar
+  PUBLIC
+  rclcpp::rclcpp
+  pioneer_core::pioneer_core
+  ${sensor_msgs_TARGETS}
+  PRIVATE
+  pluginlib::pluginlib
+)
+target_link_aria_libraries(pioneer_sonar)
+
 # ############
 # # Install ##
 # ############
 install(TARGETS
   pioneer_charger
   pioneer_drive
+  pioneer_sonar
   EXPORT ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -137,6 +153,7 @@ ament_export_include_directories(include/${PROJECT_NAME})
 ament_export_libraries(
   pioneer_charger
   pioneer_drive
+  pioneer_sonar
 )
 ament_export_dependencies(
   geometry_msgs
