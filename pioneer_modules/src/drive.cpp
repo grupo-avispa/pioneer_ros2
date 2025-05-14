@@ -87,7 +87,7 @@ void Drive::configure(
   RCLCPP_INFO(
     logger_, "The parameter publish_tf_ is set to: [%s]", publish_tf_ ? "true" : "false");
 
-  bool enable_motors_at_startup;
+  bool enable_motors_at_startup = true;
   declare_parameter_if_not_declared(
     node_, plugin_name_ + ".enable_motors_at_startup",
     rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()

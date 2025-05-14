@@ -60,10 +60,10 @@ void Sonar::configure(
   node->get_parameter(plugin_name_ + ".sonar_topic", sonar_topic_);
   RCLCPP_INFO(logger_, "The parameter sonar_topic is set to: [%s]", sonar_topic_.c_str());
 
-  bool enable_sonar;
-  declare_parameter_if_not_declared(
+  bool enable_sonar = false
+    declare_parameter_if_not_declared(
     node, plugin_name_ + ".enable_sonar_at_startup",
-    rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()
+    rclcpp::ParameterValue(false), rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Enable sonar at startup"));
   node->get_parameter(plugin_name_ + ".enable_sonar_at_startup", enable_sonar);
   RCLCPP_INFO(

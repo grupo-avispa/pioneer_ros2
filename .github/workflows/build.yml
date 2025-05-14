@@ -56,8 +56,6 @@ jobs:
             /usr/local/lib/libAria*
             /usr/local/include/Aria
           key: ariacoda-${{ runner.os }}-ubuntu-24.04
-      - name: Test if cache hit
-        run: ls -la /usr/local/include/
       - name: Build packages
         uses: ros-tooling/action-ros-ci@0.3.13
         with:

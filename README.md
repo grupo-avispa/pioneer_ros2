@@ -2,7 +2,7 @@
 
 ![ROS2](https://img.shields.io/badge/ros2-jazzy-blue?logo=ros&logoColor=white)
 ![License](https://img.shields.io/github/license/grupo-avispa/pioneer_ros2)
-[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/grupo-avispa/pioneer/actions/workflows/build.yml)
+[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml)
 
 ## Overview
 
