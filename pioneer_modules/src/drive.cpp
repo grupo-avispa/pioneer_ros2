@@ -87,21 +87,6 @@ void Drive::configure(
   RCLCPP_INFO(
     logger_, "The parameter publish_tf_ is set to: [%s]", publish_tf_ ? "true" : "false");
 
-  bool enable_motors_at_startup = true;
-  declare_parameter_if_not_declared(
-    node_, plugin_name_ + ".enable_motors_at_startup",
-    rclcpp::ParameterValue(true), rcl_interfaces::msg::ParameterDescriptor()
-    .set__description("Enable the motors at startup"));
-  node_->get_parameter(plugin_name_ + ".enable_motors_at_startup", enable_motors_at_startup);
-  RCLCPP_INFO(
-    logger_, "The parameter enable_motors_at_startup_ is set to: [%s]",
-    enable_motors_at_startup ? "true" : "false");
-  if (enable_motors_at_startup) {
-    robot_->enableMotors();
-  } else {
-    robot_->disableMotors();
-  }
-
   int timeout = 0;
   declare_parameter_if_not_declared(
     node_, plugin_name_ + ".velocity_timeout",
@@ -185,6 +170,8 @@ void Drive::activate()
   rear_bumper_pub_->on_activate();
   odometry_pub_->on_activate();
 
+  robot_->enableMotors();
+
   cmd_vel_watchdog_timer_ = node_->create_wall_timer(
     std::chrono::milliseconds(10), std::bind(&Drive::velocityWatchdogCallback, this));
 }
@@ -193,10 +180,12 @@ void Drive::deactivate()
 {
   RCLCPP_INFO(
     logger_, "Deactivating module : %s of type pioneer_module::Drive", plugin_name_.c_str());
+
+  robot_->disableMotors();
+
   front_bumper_pub_->on_deactivate();
   rear_bumper_pub_->on_deactivate();
   odometry_pub_->on_deactivate();
-  robot_->disableMotors();
 }
 
 rcl_interfaces::msg::SetParametersResult Drive::dynamicParametersCallback(

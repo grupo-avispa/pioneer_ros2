@@ -98,6 +98,14 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
     args_->add("-robotBaud %d", serial_baudrate);
   }
 
+  // Setup the robot
+  connector_ = std::make_unique<ArRobotConnector>(arg_parser_.get(), robot_.get());
+  if (!connector_->setupRobot()) {
+    RCLCPP_FATAL(get_logger(), "Could not setup the robot. Check the serial port.");
+    on_cleanup(state);
+    return nav2_util::CallbackReturn::FAILURE;
+  }
+
   nav2_util::declare_parameter_if_not_declared(
     this, "module_plugins",
     rclcpp::ParameterValue(default_ids_),
@@ -151,14 +159,6 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
   RCLCPP_INFO(
     get_logger(), "Aria framework has %s modules available.", module_ids_concat_.c_str());
 
-  // Setup the robot
-  connector_ = std::make_unique<ArRobotConnector>(arg_parser_.get(), robot_.get());
-  if (!connector_->setupRobot()) {
-    RCLCPP_FATAL(get_logger(), "Could not setup the robot. Check the serial port.");
-    on_cleanup(state);
-    return nav2_util::CallbackReturn::FAILURE;
-  }
-
   // Create a publisher for diagnostics
   diag_pub_ = this->create_publisher<diagnostic_msgs::msg::DiagnosticArray>(
     "/diagnostics", rclcpp::SystemDefaultsQoS());
@@ -169,6 +169,14 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
 nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
+
+  // Connect to the robot
+  if (!connector_->connectRobot()) {
+    RCLCPP_ERROR(get_logger(), "Could not connect to the robot.");
+    on_deactivate(state);
+    return nav2_util::CallbackReturn::FAILURE;
+  }
+  connected_ = true;
 
   // Activate the modules
   ModuleMap::iterator it;
@@ -181,14 +189,6 @@ nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::Sta
       return nav2_util::CallbackReturn::FAILURE;
     }
   }
-
-  // Connect to the robot
-  if (!connector_->connectRobot()) {
-    RCLCPP_ERROR(get_logger(), "Could not connect to the robot.");
-    on_deactivate(state);
-    return nav2_util::CallbackReturn::FAILURE;
-  }
-  connected_ = true;
 
   // Run ArRobot background processing thread
   robot_->runAsync(true);
