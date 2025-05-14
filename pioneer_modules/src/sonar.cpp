@@ -60,21 +60,6 @@ void Sonar::configure(
   node->get_parameter(plugin_name_ + ".sonar_topic", sonar_topic_);
   RCLCPP_INFO(logger_, "The parameter sonar_topic is set to: [%s]", sonar_topic_.c_str());
 
-  bool enable_sonar = false;
-  declare_parameter_if_not_declared(
-    node, plugin_name_ + ".enable_sonar_at_startup",
-    rclcpp::ParameterValue(false), rcl_interfaces::msg::ParameterDescriptor()
-    .set__description("Enable sonar at startup"));
-  node->get_parameter(plugin_name_ + ".enable_sonar_at_startup", enable_sonar);
-  RCLCPP_INFO(
-    logger_, "The parameter enable_sonar_at_startup is set to: [%s]",
-      enable_sonar ? "true" : "false");
-  if (enable_sonar) {
-    robot_->enableSonar();
-  } else {
-    robot_->disableSonar();
-  }
-
   // Create ROS publishers
   sonar_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
     sonar_topic_, rclcpp::SystemDefaultsQoS());
@@ -101,6 +86,7 @@ void Sonar::activate()
   RCLCPP_INFO(
     logger_, "Activating module : %s of type pioneer_module::Sonar", plugin_name_.c_str());
   sonar_pub_->on_activate();
+  robot_->enableSonar();
 }
 
 void Sonar::deactivate()

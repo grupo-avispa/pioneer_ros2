@@ -92,10 +92,6 @@ The Sonar module controls the robot's sonar sensors, providing real-time updates
 
 	Specifies the name of the sonar topic.
 
-* **`enable_sonar_at_startup`** (bool, default: true)
-
-	Specifies whether to enable the sonar at startup.
-
 
 [nav_msgs/Odometry]: http://docs.ros2.org/jazzy/api/nav_msgs/msg/Odometry.html
 [geometry_msgs/TwistStamped]: http://docs.ros2.org/jazzy/api/geometry_msgs/msg/TwistStamped.html
