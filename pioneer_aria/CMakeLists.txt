@@ -75,11 +75,11 @@ target_include_directories(${library_name} PUBLIC
 target_link_libraries(${library_name}
   PUBLIC
   ${diagnostic_msgs_TARGETS}
+  nav2_util::nav2_util_core
+  pioneer_core::pioneer_core
   pluginlib::pluginlib
   rclcpp::rclcpp
-  pioneer_core::pioneer_core
   PRIVATE
-  nav2_util::nav2_util_core
   rclcpp_components::component
 )
 target_link_aria_libraries(${library_name})
