@@ -79,10 +79,9 @@ target_link_libraries(${library_name}
   rclcpp::rclcpp
   pioneer_core::pioneer_core
   PRIVATE
+  nav2_util::nav2_util_core
   rclcpp_components::component
 )
-
-ament_target_dependencies(${library_name} PUBLIC nav2_util) # TODO(ajtudela): Fix this in kilted
 target_link_aria_libraries(${library_name})
 
 # Add executable
