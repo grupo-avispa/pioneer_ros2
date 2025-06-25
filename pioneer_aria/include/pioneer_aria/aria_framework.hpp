@@ -30,7 +30,7 @@
 
 // ROS
 #include "diagnostic_msgs/msg/diagnostic_array.hpp"
-#include "nav2_util/lifecycle_node.hpp"
+#include "nav2_ros_common/lifecycle_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "pluginlib/class_loader.hpp"
 
@@ -46,7 +46,7 @@ namespace pioneer_aria
  * @brief Main class that handles the AriaCoda framework and the modules.
  *
  */
-class AriaFramework : public nav2_util::LifecycleNode
+class AriaFramework : public nav2::LifecycleNode
 {
 public:
   using ModuleMap = std::unordered_map<std::string, pioneer_core::Module::Ptr>;
@@ -73,7 +73,7 @@ protected:
    * @throw pluginlib::PluginlibException When failed to initialize module
    * plugin
    */
-  nav2_util::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
+  nav2::CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
 
   /**
    * @brief Activates the modules.
@@ -81,7 +81,7 @@ protected:
    * @param state LifeCycle Node's state
    * @return Success or Failure
    */
-  nav2_util::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
+  nav2::CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
 
   /**
    * @brief Deactivates the modules.
@@ -89,7 +89,7 @@ protected:
    * @param state LifeCycle Node's state
    * @return Success or Failure
    */
-  nav2_util::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
+  nav2::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
 
   /**
    * @brief Calls clean up states and resets member variables.
@@ -97,7 +97,7 @@ protected:
    * @param state LifeCycle Node's state
    * @return Success or Failure
    */
-  nav2_util::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
+  nav2::CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
 
   /**
    * @brief Called when in Shutdown state.
@@ -105,7 +105,7 @@ protected:
    * @param state LifeCycle Node's state
    * @return Success or Failure
    */
-  nav2_util::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
+  nav2::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
 
   /**
    * @brief Create a diagnostics message.

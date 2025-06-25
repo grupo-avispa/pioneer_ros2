@@ -19,7 +19,7 @@
 
 // ROS
 #include "lifecycle_msgs/msg/state.hpp"
-#include "nav2_util/node_utils.hpp"
+#include "nav2_ros_common/node_utils.hpp"
 
 #include "pioneer_aria/aria_framework.hpp"
 
@@ -27,7 +27,7 @@ namespace pioneer_aria
 {
 
 AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
-: nav2_util::LifecycleNode("pioneer_aria", "", options),
+: nav2::LifecycleNode("pioneer_aria", "", options),
   connected_(false),
   module_loader_("pioneer_core", "pioneer_core::Module"),
   default_ids_{"drive"},
@@ -57,7 +57,7 @@ AriaFramework::~AriaFramework()
   ArLog::clearFunctor();
 }
 
-nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::State & state)
+nav2::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::State & state)
 {
   auto node = shared_from_this();
 
@@ -69,7 +69,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
 
   // Set the serial port and baudrate
   std::string serial_port;
-  nav2_util::declare_parameter_if_not_declared(
+  nav2::declare_parameter_if_not_declared(
     this, "serial_port", rclcpp::ParameterValue("/dev/ttyUSB0"),
     rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Serial port to connect to the robot"));
@@ -87,7 +87,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
     args_->add("-robotPort %s", serial_port.c_str());
   }
 
-  nav2_util::declare_parameter_if_not_declared(
+  nav2::declare_parameter_if_not_declared(
     this, "serial_baudrate", rclcpp::ParameterValue(9600),
     rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Serial baudrate to connect to the robot"));
@@ -103,10 +103,10 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
   if (!connector_->setupRobot()) {
     RCLCPP_FATAL(get_logger(), "Could not setup the robot. Check the serial port.");
     on_cleanup(state);
-    return nav2_util::CallbackReturn::FAILURE;
+    return nav2::CallbackReturn::FAILURE;
   }
 
-  nav2_util::declare_parameter_if_not_declared(
+  nav2::declare_parameter_if_not_declared(
     this, "module_plugins",
     rclcpp::ParameterValue(default_ids_),
     rcl_interfaces::msg::ParameterDescriptor()
@@ -124,7 +124,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
 
   if (module_ids_ == default_ids_) {
     for (size_t i = 0; i != default_ids_.size(); ++i) {
-      nav2_util::declare_parameter_if_not_declared(
+      nav2::declare_parameter_if_not_declared(
         this, default_ids_[i] + ".plugin",
         rclcpp::ParameterValue(default_types_[i]),
         rcl_interfaces::msg::ParameterDescriptor()
@@ -137,7 +137,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
   // Create Aria modules
   for (size_t i = 0; i != module_ids_.size(); i++) {
     try {
-      module_types_[i] = nav2_util::get_plugin_type_param(node, module_ids_[i]);
+      module_types_[i] = nav2::get_plugin_type_param(node, module_ids_[i]);
       pioneer_core::Module::Ptr module =
         module_loader_.createUniqueInstance(module_types_[i]);
       RCLCPP_INFO(
@@ -148,7 +148,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
     } catch (const pluginlib::PluginlibException & ex) {
       RCLCPP_FATAL(get_logger(), "Failed to create module. Exception: %s", ex.what());
       on_cleanup(state);
-      return nav2_util::CallbackReturn::FAILURE;
+      return nav2::CallbackReturn::FAILURE;
     }
   }
 
@@ -163,10 +163,10 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
   diag_pub_ = this->create_publisher<diagnostic_msgs::msg::DiagnosticArray>(
     "/diagnostics", rclcpp::SystemDefaultsQoS());
 
-  return nav2_util::CallbackReturn::SUCCESS;
+  return nav2::CallbackReturn::SUCCESS;
 }
 
-nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::State & state)
+nav2::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(get_logger(), "Activating");
 
@@ -174,7 +174,7 @@ nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::Sta
   if (!connector_->connectRobot()) {
     RCLCPP_ERROR(get_logger(), "Could not connect to the robot.");
     on_deactivate(state);
-    return nav2_util::CallbackReturn::FAILURE;
+    return nav2::CallbackReturn::FAILURE;
   }
   connected_ = true;
 
@@ -186,7 +186,7 @@ nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::Sta
     } catch (const std::exception & ex) {
       RCLCPP_ERROR(get_logger(), "Failed to activate module. Exception: %s", ex.what());
       on_deactivate(state);
-      return nav2_util::CallbackReturn::FAILURE;
+      return nav2::CallbackReturn::FAILURE;
     }
   }
 
@@ -202,10 +202,10 @@ nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::Sta
   // Create bond connection
   createBond();
 
-  return nav2_util::CallbackReturn::SUCCESS;
+  return nav2::CallbackReturn::SUCCESS;
 }
 
-nav2_util::CallbackReturn AriaFramework::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
+nav2::CallbackReturn AriaFramework::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
@@ -223,10 +223,10 @@ nav2_util::CallbackReturn AriaFramework::on_deactivate(const rclcpp_lifecycle::S
   // Destroy bond connection
   destroyBond();
 
-  return nav2_util::CallbackReturn::SUCCESS;
+  return nav2::CallbackReturn::SUCCESS;
 }
 
-nav2_util::CallbackReturn AriaFramework::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+nav2::CallbackReturn AriaFramework::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
 
@@ -247,14 +247,14 @@ nav2_util::CallbackReturn AriaFramework::on_cleanup(const rclcpp_lifecycle::Stat
   }
 
 
-  return nav2_util::CallbackReturn::SUCCESS;
+  return nav2::CallbackReturn::SUCCESS;
 }
 
-nav2_util::CallbackReturn AriaFramework::on_shutdown(const rclcpp_lifecycle::State &)
+nav2::CallbackReturn AriaFramework::on_shutdown(const rclcpp_lifecycle::State &)
 {
   RCLCPP_INFO(get_logger(), "Shutting down");
 
-  return nav2_util::CallbackReturn::SUCCESS;
+  return nav2::CallbackReturn::SUCCESS;
 }
 
 diagnostic_msgs::msg::DiagnosticArray AriaFramework::createDiagnostics()
