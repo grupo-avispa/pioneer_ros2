@@ -5,7 +5,7 @@ name: Build
 
 on:
   push:
-    branches: [main, jazzy]
+    branches: [ main, jazzy ]
   pull_request:
 
 env:
@@ -30,7 +30,7 @@ jobs:
           key: ariacoda-${{ runner.os }}-ubuntu-24.04
       - name: Install ARIACODA
         if: steps.cache-ariacoda.outputs.cache-hit != 'true'
-        run: | 
+        run: |
           mkdir -p ${{ env.ARIACODA_PATH }} && cd ${{ env.ARIACODA_PATH }}
           git clone ${{ env.ARIACODA_URL }}
           cd ${{ env.ARIACODA_PATH }}/AriaCoda
@@ -61,9 +61,11 @@ jobs:
         with:
           package-name: |
             pioneer_ros2
+            pioneer_aria
             pioneer_common
             pioneer_core
-            pioneer_aria
+            pioneer_description
+            pioneer_gazebo
             pioneer_modules
             pioneer_msgs
           target-ros2-distro: jazzy
