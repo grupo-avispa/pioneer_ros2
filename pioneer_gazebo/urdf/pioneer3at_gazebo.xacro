@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<!-- Copyright (c) 2026 Alberto J. Tudela Roldán
+     Copyright (c) 2026 Grupo Avispa, DTE, Universidad de Málaga
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License. -->
+
+<robot name="Pioneer3AT"
+  xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Pioneer 3-AT model -->
+  <xacro:include filename="$(find pioneer_description)/urdf/pioneer3at.xacro" />
+
+  <!--RS Helios 32 / top laser -->
+  <gazebo reference="base_laser_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+      </plugin>
+      <topic>scan</topic>
+      <gz_frame_id>base_laser_link</gz_frame_id>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>30</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>451</samples>
+            <resolution>1.000000</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>32</samples>
+            <resolution>1.000000</resolution>
+            <min_angle>-0.2705</min_angle>
+            <max_angle>0.2705</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.01</min>
+          <max>150.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+    </sensor>
+  </gazebo>
+
+  <!-- RealSense D455 camera -->
+  <gazebo reference="realsense_link">
+    <sensor name="realsense" type="rgbd_camera">
+      <topic>realsense</topic>
+      <gz_frame_id>realsense_link</gz_frame_id>
+      <always_on>1</always_on>
+      <visualize>true</visualize>
+      <update_rate>30.0</update_rate>
+      <enable_metrics>true</enable_metrics>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>848</width>
+          <height>480</height>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <!-- Joint states plugin -->
+  <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <joint_name>p3at_front_left_wheel_joint</joint_name>
+      <joint_name>p3at_front_right_wheel_joint</joint_name>
+      <joint_name>p3at_back_left_wheel_joint</joint_name>
+      <joint_name>p3at_back_right_wheel_joint</joint_name>
+      <topic>joint_states</topic>
+      <update_rate>30</update_rate>
+    </plugin>
+  </gazebo>
+
+  <!-- Skid steer drive (4-wheel) -->
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>p3at_front_left_wheel_joint</left_joint>
+      <left_joint>p3at_back_left_wheel_joint</left_joint>
+      <right_joint>p3at_front_right_wheel_joint</right_joint>
+      <right_joint>p3at_back_right_wheel_joint</right_joint>
+      <wheel_separation>0.4</wheel_separation>
+      <wheel_radius>0.1075</wheel_radius>
+      <topic>/cmd_vel</topic>
+      <odom_topic>/odom</odom_topic>
+      <tf_topic>tf</tf_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+      <odom_publish_frequency>30</odom_publish_frequency>
+    </plugin>
+  </gazebo>
+
+</robot>
