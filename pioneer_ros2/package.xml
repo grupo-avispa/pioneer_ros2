@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>pioneer_ros2</name>
-  <version>0.0.0</version>
+  <version>0.1.0</version>
   <description>Pioneer stack</description>
   <maintainer email="ajtudela@gmail.com">Alberto Tudela</maintainer>
   <license>Apache-2.0</license>
@@ -10,6 +10,8 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <exec_depend>pioneer_aria</exec_depend>
   <exec_depend>pioneer_core</exec_depend>
+  <exec_depend>pioneer_description</exec_depend>
+  <exec_depend>pioneer_gazebo</exec_depend>
   <exec_depend>pioneer_modules</exec_depend>
   <exec_depend>pioneer_msgs</exec_depend>
   <export>

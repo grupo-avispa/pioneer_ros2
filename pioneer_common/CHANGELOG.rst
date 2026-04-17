@@ -2,7 +2,7 @@
 Changelog for package pioneer_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.0.0 (XX-XX-XXXX)
+0.1.0 (17-04-2026)
 ------------------
 * Initial release.
 * Contributors: Alberto Tudela
