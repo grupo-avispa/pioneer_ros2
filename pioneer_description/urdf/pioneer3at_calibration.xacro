@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+
+<!--
+# Copyright (c) 2026 Alberto J. Tudela Roldán
+# Copyright (c) 2026 Grupo Avispa, DTE, Universidad de Málaga
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+-->
+
+<robot name="Pioneer3AT"
+    xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Xacro properties -->
+    <xacro:property name="base_link_height" value="0.177" />
+
+    <!-- Calibration params -->
+    <!-- Footprint -->
+    <xacro:property name="footprint_trans_x" value="0.0" />
+    <xacro:property name="footprint_trans_y" value="0.0" />
+    <xacro:property name="footprint_trans_z" value="0.0" />
+    <xacro:property name="footprint_rot_x" value="0.0" />
+    <xacro:property name="footprint_rot_y" value="0.0" />
+    <xacro:property name="footprint_rot_z" value="0.0" />
+
+    <!-- Top laser (base_laser_link) -->
+    <xacro:property name="top_laser_trans_x" value="0.0" />
+    <xacro:property name="top_laser_trans_y" value="0.0" />
+    <xacro:property name="top_laser_trans_z" value="0.23" />
+    <xacro:property name="top_laser_rot_x" value="0.0" />
+    <xacro:property name="top_laser_rot_y" value="0.0" />
+    <xacro:property name="top_laser_rot_z" value="0.0" />
+
+    <!-- Intel RealSense D455 relative to the body frame -->
+    <xacro:property name="realsense_trans_x" value="0.225" />
+    <xacro:property name="realsense_trans_y" value="0.0" />
+    <xacro:property name="realsense_trans_z" value="0.45" />
+    <xacro:property name="realsense_rot_x" value="0.0" />
+    <xacro:property name="realsense_rot_y" value="0.0" />
+    <xacro:property name="realsense_rot_z" value="0.0" />
+
+    <!-- Front Sonar -->
+    <xacro:property name="front_sonar_trans_x" value="0.193" />
+    <xacro:property name="front_sonar_trans_y" value="0.0" />
+    <xacro:property name="front_sonar_trans_z" value="0.25" />
+    <xacro:property name="front_sonar_rot_x" value="0.0" />
+    <xacro:property name="front_sonar_rot_y" value="0.0" />
+    <xacro:property name="front_sonar_rot_z" value="0.0" />
+
+    <!-- Back Sonar -->
+    <xacro:property name="back_sonar_trans_x" value="-0.187" />
+    <xacro:property name="back_sonar_trans_y" value="0.0" />
+    <xacro:property name="back_sonar_trans_z" value="0.247" />
+    <xacro:property name="back_sonar_rot_x" value="0.0" />
+    <xacro:property name="back_sonar_rot_y" value="0.0" />
+    <xacro:property name="back_sonar_rot_z" value="0.0" />
+
+    <!-- Front Axles -->
+    <xacro:property name="front_left_axle_trans_x" value="0.135" />
+    <xacro:property name="front_left_axle_trans_y" value="0.156" />
+    <xacro:property name="front_left_axle_trans_z" value="0.111" />
+    <xacro:property name="front_right_axle_trans_x" value="0.135" />
+    <xacro:property name="front_right_axle_trans_y" value="-0.156" />
+    <xacro:property name="front_right_axle_trans_z" value="0.111" />
+
+    <!-- Back Axles -->
+    <xacro:property name="back_left_axle_trans_x" value="-0.134" />
+    <xacro:property name="back_left_axle_trans_y" value="0.156" />
+    <xacro:property name="back_left_axle_trans_z" value="0.111" />
+    <xacro:property name="back_right_axle_trans_x" value="-0.134" />
+    <xacro:property name="back_right_axle_trans_y" value="-0.156" />
+    <xacro:property name="back_right_axle_trans_z" value="0.111" />
+
+    <!-- Top Laser Support (lidar support) -->
+    <xacro:property name="top_laser_support_trans_x" value="-0.07" />
+    <xacro:property name="top_laser_support_trans_y" value="0.0" />
+    <xacro:property name="top_laser_support_trans_z" value="0.0" />
+    <xacro:property name="top_laser_support_rot_x" value="0.0" />
+    <xacro:property name="top_laser_support_rot_y" value="0.0" />
+    <xacro:property name="top_laser_support_rot_z" value="0.0" />
+
+    <!-- Top RealSense Support -->
+    <xacro:property name="top_realsense_trans_x" value="0.225" />
+    <xacro:property name="top_realsense_trans_y" value="0.0" />
+    <xacro:property name="top_realsense_trans_z" value="0.0" />
+    <xacro:property name="top_realsense_rot_x" value="0.0" />
+    <xacro:property name="top_realsense_rot_y" value="0.0" />
+    <xacro:property name="top_realsense_rot_z" value="0.0" />
+
+</robot>

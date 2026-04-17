@@ -1,0 +1,353 @@
+<?xml version="1.0" ?>
+
+<!--
+# Copyright (c) 2026 Alberto J. Tudela Roldán
+# Copyright (c) 2026 Grupo Avispa, DTE, Universidad de Málaga
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http:#www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+-->
+
+<robot name="Pioneer-2AT"
+  xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Materials -->
+  <material name="red">
+    <color rgba="0.851 0.0 0.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="yellow">
+    <color rgba="1 1 0 1"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <!-- Chassis -->
+  <link name="base_link">
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 ${base_link_height}"/>
+      <inertia ixx="0.3338" ixy="0.0" ixz="0.0" iyy="0.4783" iyz="0.0" izz="0.3338"/>
+    </inertial>
+    <visual name="base_visual">
+      <origin xyz="0 0 ${base_link_height}" rpy="0 0 0"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/chassis.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${base_link_height}" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://pioneer_description/meshes/chassis.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Base footprint: a fictional link that is on the floor plane, needed for move_base -->
+  <link name="base_footprint"/>
+
+  <!-- Base link to base footprint -->
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="${footprint_trans_x} ${footprint_trans_y} ${footprint_trans_z}" rpy="${footprint_rot_x} ${footprint_rot_y} ${footprint_rot_z}" />
+    <parent link="base_link"/>
+    <child link="base_footprint" />
+  </joint>
+
+  <!-- Top -->
+  <link name="top_plate">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="-0.025 0 -0.223"/>
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+    </inertial>
+    <visual name="base_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/top.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+
+  <joint name="base_top_joint" type="fixed">
+    <origin xyz="0.003 0 0.274" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="top_plate"/>
+  </joint>
+
+  <!-- Lidar Support-->
+  <link name = "lidar_support">
+    <visual name="base_visual">
+      <origin xyz="0 0 0.17" rpy="1.57 0 0"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/lidar_support.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="top_laser_joint" type="fixed">
+    <origin xyz="${top_laser_support_trans_x} ${top_laser_support_trans_y} ${top_laser_support_trans_z}" rpy="${top_laser_support_rot_x} ${top_laser_support_rot_y} ${top_laser_support_rot_z}"/>
+    <parent link="top_plate"/>
+    <child link="lidar_support"/>
+  </joint>
+
+
+  <!-- BaseLaserLink-->
+  <link name="base_laser_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+  </link>
+
+  <joint name="base_laser_laser_joint" type="fixed">
+    <origin xyz="${top_laser_trans_x} ${top_laser_trans_y} ${top_laser_trans_z}" rpy="${top_laser_rot_x} ${top_laser_rot_y} ${top_laser_rot_z}"/>
+    <parent link="lidar_support"/>
+    <child link="base_laser_link"/>
+  </joint>
+
+
+  <!-- Intel Realsense Support-->
+  <link name = "realsense_support_link">
+    <visual name="base_visual">
+      <origin xyz="-0.147 0 0" rpy="0 0 -1.57"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/realsense_support.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="top_realsense_joint" type="fixed">
+    <origin xyz="${top_realsense_trans_x} ${top_realsense_trans_y} ${top_realsense_trans_z}" rpy="${top_realsense_rot_x} ${top_realsense_rot_y} ${top_realsense_rot_z}"/>
+    <parent link="top_plate"/>
+    <child link="realsense_support_link"/>
+  </joint>
+
+  <!-- Front + Back Sonar -->
+  <link name="front_sonar">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <visual name="base_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/front_sonar.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+  </link>
+
+  <joint name="base_front_joint" type="fixed">
+    <origin xyz="${front_sonar_trans_x} ${front_sonar_trans_y} ${front_sonar_trans_z}" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="front_sonar"/>
+  </joint>
+
+  <link name="back_sonar">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <visual name="base_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry name="pioneer_geom">
+        <mesh filename="package://pioneer_description/meshes/back_sonar.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="yellow"/>
+    </visual>
+  </link>
+
+  <joint name="base_back_joint" type="fixed">
+    <origin xyz="${back_sonar_trans_x} ${back_sonar_trans_y} ${back_sonar_trans_z}" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="back_sonar"/>
+  </joint>
+
+  <!-- Front Axles + Wheels + Hubcaps -->
+  <xacro:macro name="p3at_front" params="suffix reflect">
+    <link name="p3at_front_${suffix}_axle">
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/axle.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+    </link>
+
+    <joint name="base_front_${suffix}_axle_joint" type="fixed">
+      <origin xyz="0.135 ${reflect*0.156} ${front_left_axle_trans_z}" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="p3at_front_${suffix}_axle"/>
+    </joint>
+
+    <link name="p3at_front_${suffix}_hub">
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/${suffix}_hubcap.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="yellow"/>
+      </visual>
+    </link>
+
+    <joint name="base_front_${suffix}_hub_joint" type="fixed">
+      <origin xyz="0 ${reflect*0.041} 0" rpy="0 0 0"/>
+      <parent link="p3at_front_${suffix}_axle"/>
+      <child link="p3at_front_${suffix}_hub"/>
+    </joint>
+
+    <link name="p3at_front_${suffix}_wheel">
+      <inertial>
+        <mass value="0.5"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/wheel.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${-3.1415927/2} 0 0"/>
+        <geometry>
+          <cylinder radius="0.111" length="0.075"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="p3at_front_${suffix}_wheel_joint" type="continuous">
+      <axis xyz="0 1 0"/>
+      <anchor xyz="0 0 0"/>
+      <limit effort="100" velocity="100" />
+      <joint_properties damping="0.7"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="p3at_front_${suffix}_hub"/>
+      <child link="p3at_front_${suffix}_wheel"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- Back Axles + Wheels + Hubcaps -->
+  <xacro:macro name="p3at_back" params="suffix reflect">
+    <link name="p3at_back_${suffix}_axle">
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/axle.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://pioneer_description/meshes/axle.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="bp3at_back_${suffix}_axle_joint" type="fixed">
+      <origin xyz="-0.134 ${reflect*0.156} ${back_left_axle_trans_z}" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="p3at_back_${suffix}_axle"/>
+    </joint>
+
+
+    <link name="p3at_back_${suffix}_hub">
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/${suffix}_hubcap.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://pioneer_description/meshes/${suffix}_hubcap.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="p3at_back_${suffix}_hub_joint" type="fixed">
+      <origin xyz="-0 ${reflect*0.041} 0" rpy="0 0 0"/>
+      <parent link="p3at_back_${suffix}_axle"/>
+      <child link="p3at_back_${suffix}_hub"/>
+    </joint>
+
+    <link name="p3at_back_${suffix}_wheel">
+      <inertial>
+        <mass value="0.5"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.012411765597" ixy="0" ixz="0" iyy="0.015218160428" iyz="0" izz="0.011763977943"/>
+      </inertial>
+      <visual name="base_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry name="pioneer_geom">
+          <mesh filename="package://pioneer_description/meshes/wheel.stl" scale="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${-3.1415927/2} 0 0"/>
+        <geometry>
+          <cylinder radius="0.111" length="0.075"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="p3at_back_${suffix}_wheel_joint" type="continuous">
+      <axis xyz="0 1 0"/>
+      <anchor xyz="0 0 0"/>
+      <limit effort="100" velocity="100" />
+      <joint_properties damping="0.7"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="p3at_back_${suffix}_hub"/>
+      <child link="p3at_back_${suffix}_wheel"/>
+    </joint>
+  </xacro:macro>
+</robot>
