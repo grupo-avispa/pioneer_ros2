@@ -284,7 +284,8 @@ void Drive::velocityCommandCallback(const geometry_msgs::msg::Twist & msg)
 void Drive::velocityWatchdogCallback()
 {
   // If no velocity command has been received, stop the robot
-  if (clock_->now() - last_vel_received_ > vel_timeout_) {
+  auto now = clock_->now();
+  if ((now.nanoseconds() - last_vel_received_.nanoseconds()) > vel_timeout_.nanoseconds()) {
     robot_->lock();
     robot_->setVel(0);
     if (robot_->hasLatVel()) {
