@@ -14,8 +14,8 @@
 // limitations under the License.
 
 // TF2
-#include "tf2/LinearMath/Quaternion.hpp"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 // ROS
 #include "geometry_msgs/msg/quaternion.hpp"
@@ -284,7 +284,8 @@ void Drive::velocityCommandCallback(const geometry_msgs::msg::Twist & msg)
 void Drive::velocityWatchdogCallback()
 {
   // If no velocity command has been received, stop the robot
-  if (clock_->now() - last_vel_received_ > vel_timeout_) {
+  auto now = clock_->now();
+  if ((now.nanoseconds() - last_vel_received_.nanoseconds()) > vel_timeout_.nanoseconds()) {
     robot_->lock();
     robot_->setVel(0);
     if (robot_->hasLatVel()) {
