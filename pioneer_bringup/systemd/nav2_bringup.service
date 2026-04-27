@@ -1,0 +1,17 @@
+[Unit]
+Description="Bringup Nav2"
+Requires=robot_bringup.service
+
+[Service]
+User=demo
+Type=simple
+EnvironmentFile=/etc/nav2_bringup/local.env
+ExecStart=/bin/bash -c '\
+source /opt/ros/humble/setup.bash;\
+source ~/colcon_ws/install/local_setup.bash;\
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp;\
+export CYCLONEDDS_URI=~/cyclone_config.xml;\
+ros2 launch morphia_nav bringup.launch.py autostart:=false;'
+
+[Install]
+WantedBy=multi-user.target

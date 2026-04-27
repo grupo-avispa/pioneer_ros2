@@ -1,0 +1,17 @@
+[Unit]
+Description="Bringup robot hardware"
+After=network-online.target
+
+[Service]
+User=demo
+Type=simple
+EnvironmentFile=/etc/robot_bringup/local.env
+ExecStart=/bin/bash -c '\
+source /opt/ros/humble/setup.bash;\
+source ~/colcon_ws/install/local_setup.bash;\
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp;\
+export CYCLONEDDS_URI=~/cyclone_config.xml;\
+ros2 launch morphia_bringup robot.launch.py;'
+
+[Install]
+WantedBy=multi-user.target
