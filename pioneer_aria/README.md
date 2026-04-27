@@ -12,6 +12,16 @@ Launch the `pioneer_aria` node using the following command:
 ros2 launch pioneer_aria aria_launch.py
 ```
 
+## Setup udev rules
+
+This rules are necessary to allow the Pioneer robot to be accessed by the Aria framework. This rules should be installed during the Aria software installation. However, if you need to install them manually, follow the instructions below.
+
+```bash
+cd pioneer_ros2/pioneer_aria
+sudo cp rules/99-ARIA.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
 ## Nodes
 
 ### aria_framework

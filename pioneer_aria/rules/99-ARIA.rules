@@ -1,0 +1,6 @@
+###############################################################################
+# udev rules for Pioneer ARIA
+###############################################################################
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{manufacturer}=="FTDI", ATTRS{product}=="Chipi-X", ENV{ID_USB_INTERFACE_NUM}=="00", SYMLINK+="USB_Drive"
+
