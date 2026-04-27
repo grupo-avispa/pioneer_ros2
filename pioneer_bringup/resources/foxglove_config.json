@@ -1,0 +1,433 @@
+{
+  "configById": {
+    "DiagnosticSummary!2v2uqu2": {
+      "minLevel": 0,
+      "pinnedIds": [],
+      "hardwareIdFilter": "",
+      "topicToRender": "/diagnostics",
+      "sortByLevel": true
+    },
+    "DiagnosticStatusPanel!1u77qa6": {
+      "selectedHardwareId": "",
+      "selectedName": "/",
+      "topicToRender": "/diagnostics"
+    },
+    "RawMessages!3r8rw50": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/behavior_tree_log",
+      "fontSize": 12
+    },
+    "3D!6gwtd2": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 10.807201753249732,
+        "phi": 21.087923407111948,
+        "thetaOffset": -2.69874475396202,
+        "targetOffset": [
+          -5.644922832404399,
+          -0.651391601059479,
+          -1.8932915271601604e-16
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "followTf": "map",
+      "scene": {
+        "meshUpAxis": "z_up"
+      },
+      "transforms": {
+        "frame:base_link": {
+          "visible": false
+        },
+        "frame:base_footprint": {
+          "visible": false
+        },
+        "frame:base_laser_link": {
+          "visible": false
+        },
+        "frame:camera_base": {
+          "visible": false
+        },
+        "frame:camera_body": {
+          "visible": false
+        },
+        "frame:camera_visor": {
+          "visible": false
+        },
+        "frame:realsense_bottom_screw_frame": {
+          "visible": false
+        },
+        "frame:realsense_link": {
+          "visible": false
+        },
+        "frame:realsense_accel_frame": {
+          "visible": false
+        },
+        "frame:realsense_accel_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_color_frame": {
+          "visible": false
+        },
+        "frame:realsense_color_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_depth_frame": {
+          "visible": false
+        },
+        "frame:realsense_depth_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_gyro_frame": {
+          "visible": false
+        },
+        "frame:realsense_gyro_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_imu_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_infra1_frame": {
+          "visible": false
+        },
+        "frame:realsense_infra1_optical_frame": {
+          "visible": false
+        },
+        "frame:realsense_infra2_frame": {
+          "visible": false
+        },
+        "frame:realsense_infra2_optical_frame": {
+          "visible": false
+        },
+        "frame:rslidar_base_link": {
+          "visible": false
+        },
+        "frame:valeo_base_link": {
+          "visible": false
+        },
+        "frame:valeo_cam1_link": {
+          "visible": false
+        },
+        "frame:valeo_cam1_optical_link": {
+          "visible": false
+        },
+        "frame:valeo_cam2_link": {
+          "visible": false
+        },
+        "frame:valeo_cam2_optical_link": {
+          "visible": false
+        },
+        "frame:valeo_cam3_link": {
+          "visible": false
+        },
+        "frame:valeo_cam3_optical_link": {
+          "visible": false
+        },
+        "frame:map": {
+          "visible": false
+        },
+        "frame:odom": {
+          "visible": false
+        }
+      },
+      "topics": {
+        "/goal_pose": {
+          "visible": true
+        },
+        "/map": {
+          "visible": true,
+          "colorMode": "custom",
+          "frameLocked": true,
+          "alpha": 0.5
+        },
+        "/local_costmap/costmap": {
+          "visible": true,
+          "colorMode": "map",
+          "alpha": 1
+        },
+        "/global_costmap/costmap": {
+          "visible": true,
+          "colorMode": "costmap",
+          "alpha": 0.5
+        },
+        "/scan/filtered": {
+          "visible": true,
+          "colorField": "intensity",
+          "colorMode": "flat",
+          "colorMap": "turbo",
+          "flatColor": "#ff0000ff",
+          "pointSize": 3
+        },
+        "/robot_description": {
+          "visible": true
+        },
+        "/plan": {
+          "visible": true
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": false,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "59dee155-68a3-4e76-848c-373df28f47a2",
+          "layerId": "foxglove.Grid",
+          "size": 10,
+          "divisions": 10,
+          "lineWidth": 1,
+          "color": "#248eff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "publish": {
+        "type": "pose",
+        "poseTopic": "/goal_pose",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {},
+      "foxglovePanelTitle": "Mapa"
+    },
+    "RosOut!2vl64k9": {
+      "searchTerms": [],
+      "minLogLevel": 1,
+      "nameFilter": {}
+    },
+    "Tab!2vpyr03": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Diagnósticos",
+          "layout": {
+            "direction": "column",
+            "second": "DiagnosticStatusPanel!1u77qa6",
+            "first": "DiagnosticSummary!2v2uqu2"
+          }
+        },
+        {
+          "title": "Navegación",
+          "layout": "RawMessages!3r8rw50"
+        }
+      ]
+    },
+    "Indicator!1mnxv9c": {
+      "path": "/bumper.bumper_activated",
+      "style": "bulb",
+      "fontSize": 36,
+      "fallbackColor": "#68e24a",
+      "fallbackLabel": "Desactivado",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "true",
+          "color": "#ff0000",
+          "label": "Activado"
+        }
+      ],
+      "foxglovePanelTitle": "Activación Bumper"
+    },
+    "Indicator!3n6xff2": {
+      "path": "/bumper.bumper_status",
+      "style": "bulb",
+      "fontSize": 36,
+      "fallbackColor": "#68e24a",
+      "fallbackLabel": "Desactivado",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "true",
+          "color": "#ff0000",
+          "label": "Activado"
+        }
+      ],
+      "foxglovePanelTitle": "Estado Bumper"
+    },
+    "Tab!42ubcmp": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Map",
+          "layout": "3D!6gwtd2"
+        },
+        {
+          "title": "Logs",
+          "layout": "RosOut!2vl64k9"
+        }
+      ]
+    },
+    "Gauge!jxviey": {
+      "path": "/battery.percentage",
+      "minValue": 0,
+      "maxValue": 1,
+      "colorMap": "red-yellow-green",
+      "colorMode": "colormap",
+      "gradient": [
+        "#0000ff",
+        "#ff00ff"
+      ],
+      "reverse": false,
+      "foxglovePanelTitle": "Batería"
+    },
+    "Image!2qnim4k": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/realsense/color/image_raw",
+        "calibrationTopic": "/realsense/color/camera_info"
+      },
+      "foxglovePanelTitle": "Camara Nav"
+    },
+    "Teleop!24iq4zp": {
+      "topic": "/cmd_vel",
+      "publishRate": 1,
+      "upButton": {
+        "field": "linear-x",
+        "value": 1
+      },
+      "downButton": {
+        "field": "linear-x",
+        "value": -1
+      },
+      "leftButton": {
+        "field": "angular-z",
+        "value": 1
+      },
+      "rightButton": {
+        "field": "angular-z",
+        "value": -1
+      },
+      "foxglovePanelTitle": "Teleop"
+    },
+    "Plot!tslw6r": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/battery.voltage",
+          "enabled": true,
+          "color": "#f5774d",
+          "label": "Batería (V)",
+          "showLine": true
+        }
+      ],
+      "minYValue": 0,
+      "maxYValue": 32,
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/battery.voltage"
+      }
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "first": {
+      "direction": "row",
+      "first": {
+        "first": {
+          "first": "Tab!2vpyr03",
+          "second": "Indicator!1mnxv9c",
+          "direction": "column",
+          "splitPercentage": 81.35048231511254
+        },
+        "second": "Indicator!3n6xff2",
+        "direction": "column",
+        "splitPercentage": 83.26639892904953
+      },
+      "second": {
+        "first": "Tab!42ubcmp",
+        "second": {
+          "first": {
+            "first": "Gauge!jxviey",
+            "second": "Image!2qnim4k",
+            "direction": "column",
+            "splitPercentage": 44.55205811138015
+          },
+          "second": "Teleop!24iq4zp",
+          "direction": "column",
+          "splitPercentage": 55.28781793842034
+        },
+        "direction": "row",
+        "splitPercentage": 72.47769389155802
+      },
+      "splitPercentage": 21.413160733549084
+    },
+    "second": "Plot!tslw6r",
+    "direction": "column",
+    "splitPercentage": 84.59796149490374
+  }
+}
