@@ -1,8 +1,8 @@
 # Pioneer Aria
 aria:
   ros__parameters:
-    serial_port: "/dev/ttyUSB0"
-    baud_rate: 9600
+    serial_port: "/dev/pioneer_base"
+    serial_baudrate: 9600
     module_plugins: [ "charger", "drive" ]
     charger:
       plugin: "pioneer_modules::Charger"
@@ -12,5 +12,5 @@ aria:
       odom_frame: "odom"
       odom_topic: "odom"
       publish_tf: true
-      velocity_timeout: 500
+      velocity_timeout: 50
       enable_stamped_cmd_vel: true

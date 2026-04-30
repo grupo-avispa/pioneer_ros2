@@ -74,6 +74,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
     rcl_interfaces::msg::ParameterDescriptor()
     .set__description("Serial port to connect to the robot"));
   this->get_parameter("serial_port", serial_port);
+  RCLCPP_INFO(get_logger(), "The parameter serial_port is set to: [%s]", serial_port.c_str());
 
   // If serial port parameter contains a ':' character, then interpret it as hostname:tcpport
   // for wireless serial connection. Otherwise, interpret it as a serial port name.
@@ -93,6 +94,7 @@ nav2_util::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::St
     .set__description("Serial baudrate to connect to the robot"));
   int serial_baudrate = 0;
   this->get_parameter("serial_baudrate", serial_baudrate);
+  RCLCPP_INFO(get_logger(), "The parameter serial_baudrate is set to: [%i]", serial_baudrate);
 
   if (serial_baudrate != 0) {
     args_->add("-robotBaud %d", serial_baudrate);
