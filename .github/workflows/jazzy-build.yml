@@ -1,0 +1,81 @@
+# Simple set of rules for GitHub actions integration with a ROS project
+#
+
+name: Build
+
+on:
+  push:
+    branches: [ jazzy ]
+  pull_request:
+
+env:
+  ARIACODA_PATH: ${{ github.workspace }}/ariacoda
+  ARIACODA_URL: https://github.com/grupo-avispa/AriaCoda.git
+
+jobs:
+  install-ariacoda:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Cache APT Packages
+        uses: awalsh128/cache-apt-pkgs-action@v1.4.3
+        with:
+          packages: git doxygen
+      - name: Cache ARIACODA
+        id: cache-ariacoda
+        uses: actions/cache@v4.2.0
+        with:
+          path: |
+            /usr/local/lib/libAria*
+            /usr/local/include/Aria
+          key: ariacoda-${{ runner.os }}-ubuntu-24.04
+      - name: Install ARIACODA
+        if: steps.cache-ariacoda.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ${{ env.ARIACODA_PATH }} && cd ${{ env.ARIACODA_PATH }}
+          git clone ${{ env.ARIACODA_URL }}
+          cd ${{ env.ARIACODA_PATH }}/AriaCoda
+          make && sudo make install
+
+  install-pioneer:
+    runs-on: ubuntu-24.04
+    needs: install-ariacoda
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@0.7.15
+        with:
+          required-ros-distributions: jazzy
+      - name: Workaround restore system directories
+        run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
+      - name: Restore AriaCoda cache
+        id: restore-cache-ariacoda
+        uses: actions/cache@v4.2.0
+        with:
+          path: |
+            /usr/local/lib/libAria*
+            /usr/local/include/Aria
+          key: ariacoda-${{ runner.os }}-ubuntu-24.04
+      - name: Build packages
+        uses: ros-tooling/action-ros-ci@0.4.6
+        with:
+          package-name: |
+            pioneer_ros2
+            pioneer_aria
+            pioneer_common
+            pioneer_core
+            pioneer_description
+            pioneer_gazebo
+            pioneer_modules
+            pioneer_msgs
+          target-ros2-distro: jazzy
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["coverage-gcc", "coverage-pytest"]
+              },
+              "test": {
+                "mixin": ["coverage-pytest"]
+              }
+            }
+          skip-tests: false
