@@ -35,7 +35,7 @@ def generate_launch_description():
         package='joy',
         executable='joy_node',
         name='joy_node',
-        output='screen'
+        output='screen',
         parameters=[{
             'device_id': 0,
             'deadzone': 0.3,
@@ -46,12 +46,13 @@ def generate_launch_description():
     # Teleop
     teleop_node = Node(
         package='teleop_twist_joy',
-        executable='teleop_twist_joy',
-        name='teleop_twist_joy',
+        executable='teleop_node',
+        name='teleop_node',
         output='screen',
         parameters=[default_pioneer_teleop_file]
     )
 
     return LaunchDescription([
+        joy_node,
         teleop_node
     ])

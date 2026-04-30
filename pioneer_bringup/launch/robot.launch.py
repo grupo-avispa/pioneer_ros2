@@ -37,6 +37,7 @@ def generate_launch_description():
 
     # Default filenames and where to find them
     bringup_dir = get_package_share_directory('pioneer_bringup')
+    aria_dir = get_package_share_directory('pioneer_aria')
     description_dir = get_package_share_directory('pioneer_description')
     foxglove_bridge_dir = get_package_share_directory('foxglove_bridge')
 
@@ -47,7 +48,7 @@ def generate_launch_description():
     state_publisher_launch_file = os.path.join(
         description_dir, 'launch', 'state_publisher.launch.py')
     aria_launch_file = os.path.join(
-        bringup_dir, 'launch', 'aria.launch.py')
+        aria_dir, 'launch', 'aria.launch.py')
     foxglove_bridge_launch_file = os.path.join(
         foxglove_bridge_dir, 'launch', 'foxglove_bridge_launch.xml')
 
