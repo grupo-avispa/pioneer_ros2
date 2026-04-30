@@ -1,8 +1,8 @@
 # pioneer_ros2
 
-![ROS2](https://img.shields.io/badge/ros2-jazzy-blue?logo=ros&logoColor=white)
+![ROS2](https://img.shields.io/badge/ros2-rolling-blue?logo=ros&logoColor=white)
 ![License](https://img.shields.io/github/license/grupo-avispa/pioneer_ros2)
-[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml)
+[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=rolling)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml)
 
 ## Overview
 
@@ -20,7 +20,7 @@
 
 #### Dependencies
 
-- [Robot Operating System (ROS) 2](https://docs.ros.org/en/jazzy/) (middleware for robotics)
+- [Robot Operating System (ROS) 2](https://docs.ros.org/en/rolling/) (middleware for robotics)
 - [AriaCoda](https://github.com/grupo-avispa/AriaCoda) (MobileRobots Pioneer middleware for robotic applications)
 
 #### Building
