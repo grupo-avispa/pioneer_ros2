@@ -187,6 +187,50 @@
     <child link="back_sonar"/>
   </joint>
 
+  <!-- GPS -->
+  <link name="gps_link">
+    <inertial>
+      <mass value="0.05"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <visual name="gps_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="base_gps_joint" type="fixed">
+    <origin xyz="${gps_trans_x} ${gps_trans_y} ${gps_trans_z}" rpy="${gps_rot_x} ${gps_rot_y} ${gps_rot_z}"/>
+    <parent link="top_plate"/>
+    <child link="gps_link"/>
+  </joint>
+
+  <!-- IMU -->
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.05"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <visual name="imu_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.04 0.04"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="base_imu_joint" type="fixed">
+    <origin xyz="${imu_trans_x} ${imu_trans_y} ${imu_trans_z}" rpy="${imu_rot_x} ${imu_rot_y} ${imu_rot_z}"/>
+    <parent link="top_plate"/>
+    <child link="imu_link"/>
+  </joint>
+
   <!-- Front Axles + Wheels + Hubcaps -->
   <xacro:macro name="p3at_front" params="suffix reflect">
     <link name="p3at_front_${suffix}_axle">
