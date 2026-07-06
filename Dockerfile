@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="jazzy-ros-core-noble"
+ARG BASE_IMAGE="rolling-ros-core-noble"
 ARG ARIACODA_WS=/opt/ariacoda
 ARG OVERLAY_WS=/opt/overlay_ws
 
