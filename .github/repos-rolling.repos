@@ -1,1 +1,2 @@
 - git: {local-name: navigation2, uri: 'https://github.com/ros-navigation/navigation2.git', version: main}
+- git: {local-name: backward_ros, uri: 'https://github.com/pal-robotics/backward_ros.git', version: foxy-devel}
