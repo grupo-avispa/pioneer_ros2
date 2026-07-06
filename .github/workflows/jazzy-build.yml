@@ -1,12 +1,13 @@
 # Simple set of rules for GitHub actions integration with a ROS project
 #
 
-name: Build
+name: Jazzy Build
 
 on:
   push:
-    branches: [ jazzy ]
+    branches: [jazzy]
   pull_request:
+  workflow_dispatch:
 
 env:
   ARIACODA_PATH: ${{ github.workspace }}/ariacoda

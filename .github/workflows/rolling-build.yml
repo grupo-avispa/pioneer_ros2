@@ -1,12 +1,13 @@
 # Simple set of rules for GitHub actions integration with a ROS project
 #
 
-name: Build
+name: Rolling Build
 
 on:
   push:
-    branches: [ rolling ]
+    branches: [rolling]
   pull_request:
+  workflow_dispatch:
 
 env:
   ARIACODA_PATH: ${{ github.workspace }}/ariacoda
