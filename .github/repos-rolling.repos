@@ -2,3 +2,4 @@
 - git: {local-name: bond_core, uri: 'https://github.com/ros/bond_core.git', version: ros2}
 - git: {local-name: geographic_info, uri: 'https://github.com/ros-geographic-info/geographic_info.git', version: ros2}
 - git: {local-name: navigation2, uri: 'https://github.com/ros-navigation/navigation2.git', version: main}
+- git: {local-name: navigation_msgs, uri: 'https://github.com/ros-planning/navigation_msgs.git', version: rolling}
