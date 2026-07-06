@@ -29,7 +29,7 @@ RUN apt update && apt install --no-install-recommends -y \
     ros-dev-tools \
     python3-vcstool \
     python3-colcon-clean \
-    ros-$ROS_DISTRO-rmw-cyclonedds-cpp
+    ros-$ROS_DISTRO-rmw-fastrtps-cpp
 RUN rosdep init && rosdep update
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     rosdep install -q -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO && \

@@ -2,7 +2,7 @@ name: pioneer_ros2
 services:
   # Main container
   base:
-    image: grupoavispa/pioneer_ros2:main
+    image: grupoavispa/pioneer_ros2:jazzy
     build: .
     tty: true
     network_mode: host
