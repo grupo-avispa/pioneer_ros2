@@ -72,6 +72,7 @@ jobs:
             pioneer_modules
             pioneer_msgs
           target-ros2-distro: rolling
+          vcs-repo-file-url: ./.github/repos-rolling.repos
           colcon-defaults: |
             {
               "build": {
