@@ -1,0 +1,24 @@
+name: pioneer_ros2
+services:
+  # Main container
+  base:
+    image: grupoavispa/pioneer_ros2:main
+    build: .
+    tty: true
+    network_mode: host
+    ipc: host
+    pid: host
+    mac_address: XX:XX:XX:XX:XX:XX
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
+      - NET_INTERFACE=XXXXX
+    devices:
+      - /dev/ttyUSB0:/dev/pioneer_base
+    privileged: true
+
+  # Aria + description + foxglove bridge container
+  robot:
+    extends:
+      service: base
+    command: ros2 launch pioneer_bringup robot.launch.py
+    restart: unless-stopped
