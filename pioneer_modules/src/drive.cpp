@@ -271,23 +271,36 @@ void Drive::bumperDataCallback()
 
   front_bumper_state_.header.frame_id = robot_base_frame_;
   front_bumper_state_.header.stamp = clock_->now();
-
-  // Bit 0 is for stall, next bits are for bumpers (leftmost is LSB)
-  for (unsigned int i = 0; i < front_bumper_state_.bumpers.size(); i++) {
-    front_bumper_state_.bumpers[i] = (front_bumpers & (1 << (i + 1))) == 0 ? 0 : 1;
-  }
+  front_bumper_state_.bumpers =
+    parseFrontBumperBits(front_bumpers, front_bumper_state_.bumpers.size());
 
   rear_bumper_state_.header.frame_id = robot_base_frame_;
   rear_bumper_state_.header.stamp = clock_->now();
-
-  // Rear bumpers have reverse order (rightmost is LSB)
-  for (unsigned int i = 0; i < rear_bumper_state_.bumpers.size(); i++) {
-    rear_bumper_state_.bumpers[i] =
-      (rear_bumpers & (1 << (rear_bumper_state_.bumpers.size() - i))) == 0 ? 0 : 1;
-  }
+  rear_bumper_state_.bumpers =
+    parseRearBumperBits(rear_bumpers, rear_bumper_state_.bumpers.size());
 
   front_bumper_pub_->publish(front_bumper_state_);
   rear_bumper_pub_->publish(rear_bumper_state_);
+}
+
+std::vector<bool> Drive::parseFrontBumperBits(unsigned char front_bumpers, size_t count)
+{
+  // Bit 0 is for stall, next bits are for bumpers (leftmost is LSB)
+  std::vector<bool> bits(count);
+  for (size_t i = 0; i < count; i++) {
+    bits[i] = (front_bumpers & (1 << (i + 1))) != 0;
+  }
+  return bits;
+}
+
+std::vector<bool> Drive::parseRearBumperBits(unsigned char rear_bumpers, size_t count)
+{
+  // Rear bumpers have reverse order (rightmost is LSB)
+  std::vector<bool> bits(count);
+  for (size_t i = 0; i < count; i++) {
+    bits[i] = (rear_bumpers & (1 << (count - i))) != 0;
+  }
+  return bits;
 }
 
 void Drive::velocityCommandCallback(const geometry_msgs::msg::Twist & msg)

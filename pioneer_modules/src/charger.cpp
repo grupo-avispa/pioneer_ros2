@@ -86,17 +86,8 @@ void Charger::batteryDataCallback()
   battery.percentage = robot_->haveStateOfCharge() ? robot_->getStateOfCharge() / 100.0 :
     std::numeric_limits<float>::quiet_NaN();
 
-  if (robot_->isChargerPowerGood()) {
-    battery.power_supply_status = sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_CHARGING;
-  } else if (battery.percentage == 1.0) {
-    battery.power_supply_status = sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_FULL;
-  } else if (robot_->getChargeState() == ArRobot::ChargeState::CHARGING_NOT) {
-    battery.power_supply_status = sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_NOT_CHARGING;
-  } else if (robot_->getChargeState() == ArRobot::ChargeState::CHARGING_UNKNOWN) {
-    battery.power_supply_status = sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_UNKNOWN;
-  } else {
-    battery.power_supply_status = sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_DISCHARGING;
-  }
+  battery.power_supply_status = mapChargeStateToPowerSupplyStatus(
+    robot_->isChargerPowerGood(), battery.percentage, robot_->getChargeState());
 
   battery.power_supply_health = sensor_msgs::msg::BatteryState::POWER_SUPPLY_HEALTH_UNKNOWN;
   battery.power_supply_technology = sensor_msgs::msg::BatteryState::POWER_SUPPLY_TECHNOLOGY_LIFE;
@@ -104,6 +95,22 @@ void Charger::batteryDataCallback()
   battery.serial_number = "Unknown";
 
   battery_pub_->publish(battery);
+}
+
+uint8_t Charger::mapChargeStateToPowerSupplyStatus(
+  bool charger_power_good, float percentage, ArRobot::ChargeState charge_state)
+{
+  if (charger_power_good) {
+    return sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_CHARGING;
+  } else if (percentage == 1.0) {
+    return sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_FULL;
+  } else if (charge_state == ArRobot::ChargeState::CHARGING_NOT) {
+    return sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_NOT_CHARGING;
+  } else if (charge_state == ArRobot::ChargeState::CHARGING_UNKNOWN) {
+    return sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_UNKNOWN;
+  } else {
+    return sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_DISCHARGING;
+  }
 }
 
 }  // namespace pioneer_modules

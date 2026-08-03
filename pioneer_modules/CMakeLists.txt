@@ -144,6 +144,13 @@ if(BUILD_TESTING)
   # the following line skips the linter which checks for copyrights
   set(ament_cmake_copyright_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
+
+  ament_add_gtest(test_drive test/test_drive.cpp)
+  target_link_libraries(test_drive pioneer_drive)
+
+  ament_add_gtest(test_charger test/test_charger.cpp)
+  target_link_libraries(test_charger pioneer_charger)
 endif()
 
 # ##################################
