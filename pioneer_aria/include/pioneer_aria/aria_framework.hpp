@@ -17,12 +17,14 @@
 #define PIONEER_ARIA__ARIA_FRAMEWORK_HPP_
 
 // ARIA
+#include <Aria/Aria.h>
 #include <Aria/ArArgumentBuilder.h>
 #include <Aria/ArArgumentParser.h>
 #include <Aria/ArRobotConnector.h>
 #include <Aria/ArRobot.h>
 
 // C++
+#include <atomic>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -122,6 +124,11 @@ protected:
   std::unique_ptr<ArArgumentParser> arg_parser_;
   std::shared_ptr<pioneer_core::AriaLogger> aria_logger_;
   bool connected_;
+
+  // Tracks how many AriaFramework instances are alive in this process, so that Aria::init()
+  // and Aria::shutdown() (global, process-wide) are each called exactly once even if several
+  // nodes of this type are composed into the same process.
+  static std::atomic<int> aria_instance_count_;
 
   // Module Plugins
   pluginlib::ClassLoader<pioneer_core::Module> module_loader_;

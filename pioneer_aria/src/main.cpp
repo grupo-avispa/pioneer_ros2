@@ -21,10 +21,8 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  Aria::init();
   auto node = std::make_shared<pioneer_aria::AriaFramework>();
   rclcpp::spin(node->get_node_base_interface());
-  Aria::shutdown();
   rclcpp::shutdown();
   return 0;
 }

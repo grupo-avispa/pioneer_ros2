@@ -26,6 +26,8 @@
 namespace pioneer_aria
 {
 
+std::atomic<int> AriaFramework::aria_instance_count_{0};
+
 AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
 : nav2::LifecycleNode("aria", "", options),
   connected_(false),
@@ -34,6 +36,12 @@ AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
   default_types_{"pioneer_modules::Drive"}
 {
   RCLCPP_INFO(get_logger(), "Creating Aria framework");
+
+  // Aria::init() sets up process-wide global state, so it must run exactly once even when
+  // composing several AriaFramework instances into the same process.
+  if (aria_instance_count_.fetch_add(1) == 0) {
+    Aria::init();
+  }
 
   // Redirect Aria logger
   aria_logger_ = std::make_shared<pioneer_core::AriaLogger>(this->get_logger());
@@ -62,6 +70,11 @@ AriaFramework::~AriaFramework()
   timer_.reset();
 
   ArLog::clearFunctor();
+
+  // Only shut down Aria once the last AriaFramework instance in this process is destroyed.
+  if (aria_instance_count_.fetch_sub(1) == 1) {
+    Aria::shutdown();
+  }
 }
 
 nav2::CallbackReturn AriaFramework::on_configure(const rclcpp_lifecycle::State & state)
