@@ -15,6 +15,9 @@
  * [pioneer_aria]: This is the main node that interfaces with the Aria framework.
  * [pioneer_modules]: This package contains the implementations of the Pioneer modules such as `drive`, `charger`, etc.
  * [pioneer_msgs]: This package contains messages and services related to the MobileRobots Pioneer robot base.
+ * [pioneer_description]: This package contains the URDF/xacro description of the Pioneer robots.
+ * [pioneer_gazebo]: This package contains the Gazebo simulation assets and launch files for the Pioneer robots.
+ * [pioneer_bringup]: This package contains the launch files and parameters to bring up a Pioneer robot.
 
 ## Installation
 
@@ -32,7 +35,7 @@ To build from source, clone the latest version from this repository into your co
 cd colcon_workspace/src
 git clone https://github.com/grupo-avispa/pioneer_ros2.git
 cd ../
-rosdep install -i --from-path src --rosdistro jazzy -y
+rosdep install -i --from-path src --rosdistro rolling -y
 colcon build --symlink-install
 ```
 
@@ -41,3 +44,6 @@ colcon build --symlink-install
 [pioneer_aria]: /pioneer_aria
 [pioneer_modules]: /pioneer_modules
 [pioneer_msgs]: /pioneer_msgs
+[pioneer_description]: /pioneer_description
+[pioneer_gazebo]: /pioneer_gazebo
+[pioneer_bringup]: /pioneer_bringup
