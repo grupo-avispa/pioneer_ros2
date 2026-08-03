@@ -217,8 +217,7 @@ rcl_interfaces::msg::SetParametersResult Drive::dynamicParametersCallback(
     const auto & type = parameter.get_type();
     const auto & name = parameter.get_name();
 
-    if (type == ParameterType::PARAMETER_BOOL) {
-    } else if (type == ParameterType::PARAMETER_STRING) {
+    if (type == ParameterType::PARAMETER_STRING) {
       if (name == plugin_name_ + ".robot_base_frame") {
         robot_base_frame_ = parameter.as_string();
         RCLCPP_INFO(logger_, "The parameter base_frame is set to: [%s]", robot_base_frame_.c_str());
