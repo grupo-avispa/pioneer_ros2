@@ -16,3 +16,4 @@
 set(AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR ":")
 
 include("${pioneer_common_DIR}/aria_package.cmake")
+include("${pioneer_common_DIR}/pioneer_build_settings.cmake")
