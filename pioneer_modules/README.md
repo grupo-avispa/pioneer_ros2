@@ -16,7 +16,7 @@ The Charger module monitors the state of the battery and the charging station.
 
 #### Published Topics
 
-* **`battery_state`** ([sensor_msgs/BatteryState])
+* **`battery`** ([sensor_msgs/BatteryState])
 
 	Publishes the current state of the battery.
 
@@ -34,15 +34,19 @@ The Drive module controls the robot's motors, handling velocity commands, odomet
 
 * **`odom`** ([nav_msgs/Odometry])
 
-	Publishes the robot's odometry. This is also published as a TF between `/odom` and `/base_footprint`.
+	Publishes the robot's odometry. This is also published as a TF between `odom_frame` and `robot_base_frame` (by default, `odom` and `base_link`).
 
-* **`bumper`** ([pioneer_msgs/BumperState])
+* **`front_bumper`** ([pioneer_msgs/BumperState])
 
-	Publishes the current state of the robot's bumper.
+	Publishes the current state of the robot's front bumper.
+
+* **`rear_bumper`** ([pioneer_msgs/BumperState])
+
+	Publishes the current state of the robot's rear bumper.
 
 #### Services
 
-* **`enable_motors`** ([pioneer_msgs/EnableMotors])
+* **`drive/enable_motors`** ([pioneer_msgs/EnableMotors])
 
 	This service takes a `std_msgs::Bool enabled` in the request, and gives an empty response. Disabling the motors is the same as placing the robot into "Free Run" mode from the status display.
 
