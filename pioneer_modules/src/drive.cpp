@@ -333,7 +333,7 @@ nav_msgs::msg::Odometry Drive::ariaToRosOdometry(
   // Aria returns the velocity in mm/s and the angle in degrees
   odom_msg.twist.twist.linear.x = linear_vel_x / 1000.0;
   odom_msg.twist.twist.linear.y = linear_vel_y / 1000.0;
-  odom_msg.twist.twist.angular.x = angular_vel_z * M_PI / 180.0;
+  odom_msg.twist.twist.angular.z = angular_vel_z * M_PI / 180.0;
 
   return odom_msg;
 }
