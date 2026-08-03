@@ -103,6 +103,8 @@ protected:
   std::unique_ptr<ArFunctorC<Charger>> battery_callback_functor_;
   std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::BatteryState>>
   battery_pub_;
+
+  std::string robot_base_frame_;
 };
 
 }  // namespace pioneer_modules
