@@ -76,6 +76,7 @@ void Sonar::cleanup()
 {
   RCLCPP_INFO(
     logger_, "Cleaning up module : %s of type pioneer_module::Sonar", plugin_name_.c_str());
+  robot_->remSensorInterpTask(sonar_callback_functor_.get());
   sonar_pub_.reset();
 }
 

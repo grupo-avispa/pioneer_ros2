@@ -56,6 +56,7 @@ void Charger::cleanup()
 {
   RCLCPP_INFO(
     logger_, "Cleaning up module : %s of type pioneer_module::Charger", plugin_name_.c_str());
+  robot_->remSensorInterpTask(battery_callback_functor_.get());
   battery_pub_.reset();
 }
 
