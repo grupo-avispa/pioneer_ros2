@@ -171,6 +171,8 @@ void Drive::cleanup()
 {
   RCLCPP_INFO(
     logger_, "Cleaning up module : %s of type pioneer_module::Drive", plugin_name_.c_str());
+  robot_->remSensorInterpTask(odometry_callback_functor_.get());
+  robot_->remSensorInterpTask(bumper_callback_functor_.get());
   front_bumper_pub_.reset();
   rear_bumper_pub_.reset();
   odometry_pub_.reset();
