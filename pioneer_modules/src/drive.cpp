@@ -352,6 +352,16 @@ bool Drive::enableMotors(
 nav_msgs::msg::Odometry Drive::ariaToRosOdometry(
   const ArPose & pose, double linear_vel_x, double linear_vel_y, double angular_vel_z)
 {
+  // Reasonable default covariances for a ground robot: small variance on the axes Aria
+  // actually reports (x, y, yaw and their rates), and a very large variance on the
+  // unobserved ones (z, roll, pitch) so consumers like robot_localization's EKF can
+  // safely ignore them.
+  constexpr double kPlanarPositionVariance = 0.01;
+  constexpr double kPlanarVelocityVariance = 0.01;
+  constexpr double kYawVariance = 0.02;
+  constexpr double kYawRateVariance = 0.02;
+  constexpr double kUnobservedVariance = 1e6;
+
   nav_msgs::msg::Odometry odom_msg;
   odom_msg.header.frame_id = odom_frame_;
   odom_msg.header.stamp = clock_->now();
@@ -363,11 +373,25 @@ nav_msgs::msg::Odometry Drive::ariaToRosOdometry(
   odom_msg.pose.pose.orientation =
     tf2::toMsg(tf2::Quaternion({0, 0, 1}, pose.getTh() * M_PI / 180.0));
 
+  odom_msg.pose.covariance[0] = kPlanarPositionVariance;  // x
+  odom_msg.pose.covariance[7] = kPlanarPositionVariance;  // y
+  odom_msg.pose.covariance[14] = kUnobservedVariance;  // z
+  odom_msg.pose.covariance[21] = kUnobservedVariance;  // roll
+  odom_msg.pose.covariance[28] = kUnobservedVariance;  // pitch
+  odom_msg.pose.covariance[35] = kYawVariance;  // yaw
+
   // Set the velocity
   // Aria returns the velocity in mm/s and the angle in degrees
   odom_msg.twist.twist.linear.x = linear_vel_x / 1000.0;
   odom_msg.twist.twist.linear.y = linear_vel_y / 1000.0;
   odom_msg.twist.twist.angular.z = angular_vel_z * M_PI / 180.0;
+
+  odom_msg.twist.covariance[0] = kPlanarVelocityVariance;  // vx
+  odom_msg.twist.covariance[7] = kPlanarVelocityVariance;  // vy
+  odom_msg.twist.covariance[14] = kUnobservedVariance;  // vz
+  odom_msg.twist.covariance[21] = kUnobservedVariance;  // wx
+  odom_msg.twist.covariance[28] = kUnobservedVariance;  // wy
+  odom_msg.twist.covariance[35] = kYawRateVariance;  // wz
 
   return odom_msg;
 }
