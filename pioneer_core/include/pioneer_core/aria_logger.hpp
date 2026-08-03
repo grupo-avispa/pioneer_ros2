@@ -50,7 +50,7 @@ public:
    */
   void invoke(const char *message) override
   {
-    RCLCPP_INFO(logger_, message);
+    RCLCPP_INFO(logger_, "%s", message);
   }
 
   /**
@@ -63,16 +63,16 @@ public:
     // Convert Aria log level to RCLCPP log level
     switch (level) {
       case ArLog::Terse:
-        RCLCPP_WARN(logger_, message);
+        RCLCPP_WARN(logger_, "%s", message);
         break;
       case ArLog::Normal:
-        RCLCPP_INFO(logger_, message);
+        RCLCPP_INFO(logger_, "%s", message);
         break;
       case ArLog::Verbose:
-        RCLCPP_DEBUG(logger_, message);
+        RCLCPP_DEBUG(logger_, "%s", message);
         break;
       default:
-        RCLCPP_INFO(logger_, message);
+        RCLCPP_INFO(logger_, "%s", message);
         break;
     }
   }
