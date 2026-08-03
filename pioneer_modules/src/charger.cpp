@@ -21,6 +21,13 @@
 namespace pioneer_modules
 {
 
+namespace
+{
+// Conservative upper bound for a mobile robot's battery pack; above this, Aria's reported
+// temperature is treated as an overheat condition.
+constexpr float kMaxSafeBatteryTemperatureCelsius = 45.0;
+}  // namespace
+
 void Charger::configure(
   const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent, std::string name,
   std::weak_ptr<ArRobot> robot)
@@ -89,7 +96,15 @@ void Charger::batteryDataCallback()
   battery.power_supply_status = mapChargeStateToPowerSupplyStatus(
     robot_->isChargerPowerGood(), battery.percentage, robot_->getChargeState());
 
-  battery.power_supply_health = sensor_msgs::msg::BatteryState::POWER_SUPPLY_HEALTH_UNKNOWN;
+  // Derive the health from the battery temperature when Aria reports one; otherwise there is
+  // no data to base a health estimate on.
+  if (robot_->hasTemperature()) {
+    battery.power_supply_health = battery.temperature > kMaxSafeBatteryTemperatureCelsius ?
+      sensor_msgs::msg::BatteryState::POWER_SUPPLY_HEALTH_OVERHEAT :
+      sensor_msgs::msg::BatteryState::POWER_SUPPLY_HEALTH_GOOD;
+  } else {
+    battery.power_supply_health = sensor_msgs::msg::BatteryState::POWER_SUPPLY_HEALTH_UNKNOWN;
+  }
   battery.power_supply_technology = sensor_msgs::msg::BatteryState::POWER_SUPPLY_TECHNOLOGY_LIFE;
   battery.location = "Unknown";
   battery.serial_number = "Unknown";
