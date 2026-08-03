@@ -204,7 +204,7 @@ nav2_util::CallbackReturn AriaFramework::on_activate(const rclcpp_lifecycle::Sta
 
   // Create a timer to publish diagnostics
   timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(10), [this]() {
+    std::chrono::milliseconds(1000), [this]() {
       diag_pub_->publish(createDiagnostics());
     });
 
@@ -271,8 +271,18 @@ diagnostic_msgs::msg::DiagnosticArray AriaFramework::createDiagnostics()
   diagnostic_msgs::msg::DiagnosticArray msg;
   diagnostic_msgs::msg::DiagnosticStatus status;
   status.name = "Aria framework";
-  status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
-  status.message = "Aria framework is running";
+
+  if (!connected_) {
+    status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+    status.message = "Aria framework is not connected to the robot";
+  } else if (robot_->isEStopPressed()) {
+    status.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
+    status.message = "Aria framework is connected but the E-Stop is pressed";
+  } else {
+    status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+    status.message = "Aria framework is running";
+  }
+
   msg.status.push_back(status);
   return msg;
 }
