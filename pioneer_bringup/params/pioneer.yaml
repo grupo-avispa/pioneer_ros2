@@ -12,5 +12,5 @@ aria:
       odom_frame: "odom"
       odom_topic: "odom"
       publish_tf: true
-      velocity_timeout: 50000
+      velocity_timeout: 500
       enable_stamped_cmd_vel: true

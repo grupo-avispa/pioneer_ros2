@@ -29,6 +29,24 @@ using rcl_interfaces::msg::ParameterType;
 using std::placeholders::_1;
 using std::placeholders::_2;
 
+namespace
+{
+// The velocity watchdog stops the robot once no cmd_vel has been received for this long.
+// A timeout above this bound is a safety hazard on a physical mobile robot.
+constexpr int kMaxSafeVelocityTimeoutMs = 2000;
+
+void warnIfVelocityTimeoutUnsafe(int timeout_ms, const rclcpp::Logger & logger)
+{
+  if (timeout_ms <= 0 || timeout_ms > kMaxSafeVelocityTimeoutMs) {
+    RCLCPP_WARN(
+      logger,
+      "The velocity_timeout parameter (%i ms) is outside the recommended safety range "
+      "(1-%i ms). The robot may keep moving for a long time after the last cmd_vel is lost.",
+      timeout_ms, kMaxSafeVelocityTimeoutMs);
+  }
+}
+}  // namespace
+
 void Drive::configure(
   const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent, std::string name,
   std::weak_ptr<ArRobot> robot)
@@ -94,6 +112,7 @@ void Drive::configure(
     .set__description("The interval in milliseconds to check for new velocity commands"));
   node_->get_parameter(plugin_name_ + ".velocity_timeout", timeout);
   RCLCPP_INFO(logger_, "The parameter velocity_timeout is set to: [%i]", timeout);
+  warnIfVelocityTimeoutUnsafe(timeout, logger_);
   vel_timeout_ = rclcpp::Duration::from_seconds(timeout / 1000.0);
 
   // Create ROS publishers
@@ -215,6 +234,7 @@ rcl_interfaces::msg::SetParametersResult Drive::dynamicParametersCallback(
         int timeout = parameter.as_int();
         vel_timeout_ = rclcpp::Duration::from_seconds(timeout / 1000.0);
         RCLCPP_INFO(logger_, "The parameter velocity_timeout is set to: [%i]", timeout);
+        warnIfVelocityTimeoutUnsafe(timeout, logger_);
       }
     }
   }
