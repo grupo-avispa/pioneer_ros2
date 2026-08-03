@@ -20,6 +20,7 @@
 #include <Aria/ArRobot.h>
 
 // C++
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -82,6 +83,17 @@ protected:
    * @brief Callback for battery data.
    */
   void batteryDataCallback();
+
+  /**
+   * @brief Map the Aria charge state to a ROS `sensor_msgs::msg::BatteryState` power supply status.
+   *
+   * @param charger_power_good Whether the charger reports good input power.
+   * @param percentage State of charge in the [0, 1] range, or NaN if unknown.
+   * @param charge_state Charge state reported by Aria.
+   * @return uint8_t One of `sensor_msgs::msg::BatteryState::POWER_SUPPLY_STATUS_*`.
+   */
+  static uint8_t mapChargeStateToPowerSupplyStatus(
+    bool charger_power_good, float percentage, ArRobot::ChargeState charge_state);
 
   // Plugin related
   std::string plugin_name_;

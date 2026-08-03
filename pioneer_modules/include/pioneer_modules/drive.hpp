@@ -145,6 +145,28 @@ protected:
    */
   geometry_msgs::msg::TransformStamped ariaToRosTf(const ArPose & pose);
 
+  /**
+   * @brief Parse the front bumper bits from the Aria stall value byte.
+   *
+   * Bit 0 is the stall bit, the following bits are the bumpers (leftmost is LSB).
+   *
+   * @param front_bumpers Byte with the stall and front bumper bits.
+   * @param count Number of front bumpers.
+   * @return std::vector<bool> True for each pressed bumper.
+   */
+  static std::vector<bool> parseFrontBumperBits(unsigned char front_bumpers, size_t count);
+
+  /**
+   * @brief Parse the rear bumper bits from the Aria stall value byte.
+   *
+   * Rear bumpers have reverse order (rightmost is LSB).
+   *
+   * @param rear_bumpers Byte with the rear bumper bits.
+   * @param count Number of rear bumpers.
+   * @return std::vector<bool> True for each pressed bumper.
+   */
+  static std::vector<bool> parseRearBumperBits(unsigned char rear_bumpers, size_t count);
+
   // Plugin related
   std::string plugin_name_;
   rclcpp::Clock::SharedPtr clock_;
