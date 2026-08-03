@@ -40,6 +40,14 @@ void Charger::configure(
     throw std::runtime_error("Unable to lock robot!");
   }
 
+  // Declare and read parameters
+  declare_parameter_if_not_declared(
+    node, plugin_name_ + ".robot_base_frame",
+    rclcpp::ParameterValue("base_link"), rcl_interfaces::msg::ParameterDescriptor()
+    .set__description("The name of the base frame of the robot"));
+  node->get_parameter(plugin_name_ + ".robot_base_frame", robot_base_frame_);
+  RCLCPP_INFO(logger_, "The parameter robot_base_frame is set to: [%s]", robot_base_frame_.c_str());
+
   // Create ROS publishers
   battery_pub_ = node->create_publisher<sensor_msgs::msg::BatteryState>(
     "battery", rclcpp::SystemDefaultsQoS());
@@ -78,7 +86,7 @@ void Charger::batteryDataCallback()
 {
   sensor_msgs::msg::BatteryState battery;
 
-  battery.header.frame_id = "base_link";
+  battery.header.frame_id = robot_base_frame_;
   battery.header.stamp = clock_->now();
   battery.voltage = robot_->getRealBatteryVoltageNow();
   battery.temperature = robot_->hasTemperature() ?

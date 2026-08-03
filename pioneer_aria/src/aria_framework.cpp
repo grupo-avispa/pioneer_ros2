@@ -27,7 +27,7 @@ namespace pioneer_aria
 {
 
 AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
-: nav2::LifecycleNode("pioneer_aria", "", options),
+: nav2::LifecycleNode("aria", "", options),
   connected_(false),
   module_loader_("pioneer_core", "pioneer_core::Module"),
   default_ids_{"drive"},
