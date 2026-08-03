@@ -46,6 +46,13 @@ AriaFramework::AriaFramework(const rclcpp::NodeOptions & options)
 
 AriaFramework::~AriaFramework()
 {
+  // Stop the Aria background thread before releasing the modules, otherwise the still-running
+  // thread may invoke a sensor interp task functor owned by an already-destroyed module.
+  if (robot_ && robot_->isRunning()) {
+    robot_->stopRunning();
+    robot_->waitForRunExit();
+  }
+
   modules_.clear();
 
   robot_.reset();
