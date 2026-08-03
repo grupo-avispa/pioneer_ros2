@@ -21,9 +21,6 @@
 namespace pioneer_modules
 {
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-
 void Charger::configure(
   const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent, std::string name,
   std::weak_ptr<ArRobot> robot)
@@ -50,7 +47,7 @@ void Charger::configure(
   // Create Aria subscribers
   battery_callback_functor_ =
     std::make_unique<ArFunctorC<Charger>>(this, &Charger::batteryDataCallback);
-  robot_->addSensorInterpTask("batterState", 100, battery_callback_functor_.get());
+  robot_->addSensorInterpTask("batteryState", 100, battery_callback_functor_.get());
 
   RCLCPP_INFO(logger_, "Configured module : %s", plugin_name_.c_str());
 }

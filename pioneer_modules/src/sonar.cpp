@@ -16,7 +16,6 @@
 
 // ROS
 #include "pioneer_modules/sonar.hpp"
-#include "sensor_msgs/msg/point_cloud.hpp"
 #include "sensor_msgs/point_cloud2_iterator.hpp"
 
 namespace pioneer_modules
@@ -24,7 +23,6 @@ namespace pioneer_modules
 
 using rcl_interfaces::msg::ParameterType;
 using std::placeholders::_1;
-using std::placeholders::_2;
 
 void Sonar::configure(
   const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent, std::string name,
@@ -107,8 +105,7 @@ rcl_interfaces::msg::SetParametersResult Sonar::dynamicParametersCallback(
     const auto & type = parameter.get_type();
     const auto & name = parameter.get_name();
 
-    if (type == ParameterType::PARAMETER_BOOL) {
-    } else if (type == ParameterType::PARAMETER_STRING) {
+    if (type == ParameterType::PARAMETER_STRING) {
       if (name == plugin_name_ + ".sonar_frame") {
         sonar_frame_ = parameter.as_string();
         RCLCPP_INFO(logger_, "The parameter sonar_frame is set to: [%s]", sonar_frame_.c_str());
