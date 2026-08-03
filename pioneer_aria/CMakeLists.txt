@@ -7,7 +7,7 @@ project(pioneer_aria)
 # # Find ament macros and libraries
 find_package(ament_cmake REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
-find_package(nav2_util REQUIRED)
+find_package(nav2_ros_common REQUIRED)
 find_package(pioneer_core REQUIRED)
 find_package(pioneer_common REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -33,7 +33,7 @@ target_include_directories(${library_name} PUBLIC
 target_link_libraries(${library_name}
   PUBLIC
   ${diagnostic_msgs_TARGETS}
-  nav2_util::nav2_util_core
+  nav2_ros_common::nav2_ros_common
   pioneer_core::pioneer_core
   pluginlib::pluginlib
   rclcpp::rclcpp
@@ -92,7 +92,7 @@ ament_export_include_directories(include/${PROJECT_NAME})
 ament_export_libraries(${library_name})
 ament_export_dependencies(
   diagnostic_msgs
-  nav2_util
+  nav2_ros_common
   pioneer_core
   pluginlib
   rclcpp
