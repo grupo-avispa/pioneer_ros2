@@ -15,7 +15,7 @@ env:
 
 jobs:
   install-ariacoda:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Cache APT Packages
         uses: awalsh128/cache-apt-pkgs-action@v1.6.3
@@ -28,7 +28,7 @@ jobs:
           path: |
             /usr/local/lib/libAria*
             /usr/local/include/Aria
-          key: ariacoda-${{ runner.os }}-ubuntu-24.04
+          key: ariacoda-${{ runner.os }}-ubuntu-26.04
       - name: Install ARIACODA
         if: steps.cache-ariacoda.outputs.cache-hit != 'true'
         run: |
@@ -38,7 +38,7 @@ jobs:
           make && sudo make install
 
   install-pioneer:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: ros:rolling
     needs: install-ariacoda
@@ -58,7 +58,7 @@ jobs:
           path: |
             /usr/local/lib/libAria*
             /usr/local/include/Aria
-          key: ariacoda-${{ runner.os }}-ubuntu-24.04
+          key: ariacoda-${{ runner.os }}-ubuntu-26.04
       - name: Install ARIACODA
         if: steps.restore-cache-ariacoda.outputs.cache-hit != 'true'
         run: |

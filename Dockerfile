@@ -1,9 +1,9 @@
-ARG BASE_IMAGE="rolling-ros-core-noble"
+ARG BASE_IMAGE="rolling-ros-core-resolute"
 ARG ARIACODA_WS=/opt/ariacoda
 ARG OVERLAY_WS=/opt/overlay_ws
 
 # Build AriaCoda
-FROM ubuntu:24.04 AS ariacoda-base
+FROM ubuntu:26.04 AS ariacoda-base
 ARG DEBIAN_FRONTEND=noninteractive
 ARG ARIACODA_WS
 RUN apt update && apt install --no-install-recommends -y \
