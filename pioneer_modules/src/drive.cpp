@@ -159,7 +159,7 @@ void Drive::configure(
 
   // Initialize the transform broadcaster
   if (publish_tf_) {
-    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(node_);
+    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*node_);
   }
 
   // Initialize the bumpers
