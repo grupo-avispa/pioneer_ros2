@@ -11,6 +11,7 @@
   <exec_depend>pioneer_description</exec_depend>
   <exec_depend>foxglove_bridge</exec_depend>
   <exec_depend>launch_ros</exec_depend>
+  <exec_depend>nav2_common</exec_depend>
   <exec_depend>pioneer_aria</exec_depend>
   <exec_depend>joy</exec_depend>
   <exec_depend>teleop_twist_joy</exec_depend>
