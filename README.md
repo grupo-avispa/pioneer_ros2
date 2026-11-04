@@ -1,10 +1,9 @@
 # pioneer_ros2
 
-![ROS2](https://img.shields.io/badge/ros2-rolling-blue?logo=ros&logoColor=white)
+![ROS2](https://img.shields.io/badge/ros2-lyrical-blue?logo=ros&logoColor=white)
 ![License](https://img.shields.io/github/license/grupo-avispa/pioneer_ros2)
-[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=rolling)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml)
-[![Docker image](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/docker_image.yml/badge.svg?branch=rolling)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/docker_image.yml)
-
+[![Build](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml/badge.svg?branch=lyrical)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/build.yml)
+[![Docker image](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/docker_image.yml/badge.svg?branch=lyrical)](https://github.com/grupo-avispa/pioneer_ros2/actions/workflows/docker_image.yml)
 
 ## Overview
 
@@ -25,7 +24,7 @@
 
 #### Dependencies
 
-- [Robot Operating System (ROS) 2](https://docs.ros.org/en/rolling/) (middleware for robotics)
+- [Robot Operating System (ROS) 2](https://docs.ros.org/en/lyrical/) (middleware for robotics)
 - [AriaCoda](https://github.com/grupo-avispa/AriaCoda) (MobileRobots Pioneer middleware for robotic applications)
 
 #### Building
@@ -35,7 +34,7 @@ To build from source, clone the latest version from this repository into your co
 cd colcon_workspace/src
 git clone https://github.com/grupo-avispa/pioneer_ros2.git
 cd ../
-rosdep install -i --from-path src --rosdistro rolling -y
+rosdep install -i --from-path src --rosdistro lyrical -y
 colcon build --symlink-install
 ```
 

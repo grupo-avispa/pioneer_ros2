@@ -5,7 +5,7 @@ name: Build
 
 on:
   push:
-    branches: [rolling]
+    branches: [lyrical]
   pull_request:
   workflow_dispatch:
 
@@ -40,7 +40,7 @@ jobs:
   install-pioneer:
     runs-on: ubuntu-26.04
     container:
-      image: ros:rolling
+      image: ros:lyrical
     needs: install-ariacoda
     steps:
       - name: Checkout Repository
@@ -80,8 +80,7 @@ jobs:
             pioneer_gazebo
             pioneer_modules
             pioneer_msgs
-          target-ros2-distro: rolling
-          vcs-repo-file-url: ./.github/repos-rolling.repos
+          target-ros2-distro: lyrical
           colcon-defaults: |
             {
               "build": {

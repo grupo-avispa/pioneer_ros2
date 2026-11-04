@@ -17,3 +17,9 @@ logs_*.zip
 build/
 install/
 log/
+
+################################################################################
+# Local tooling
+
+.codegraph/
+CLAUDE.md
